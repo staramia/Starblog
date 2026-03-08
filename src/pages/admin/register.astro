@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="注册账号 | 创作者后台" description="注册创作者账号。">
+  <section class="article auth-card">
+    <h1>注册账号</h1>
+    <form id="register-form" class="auth-form">
+      <label>
+        用户名
+        <input name="nickname" type="text" required minlength="2" placeholder="用于主页展示" />
+      </label>
+      <label>
+        账号
+        <input name="account" type="text" required pattern="[A-Za-z0-9]{2,}" placeholder="至少 2 位英文字母或数字" />
+      </label>
+      <label>
+        密码
+        <input name="password" type="password" required minlength="8" placeholder="至少 8 位" />
+      </label>
+      <button class="btn btn-primary" type="submit">注册并登录</button>
+      <p class="post-meta">已有账号？<a href="/admin/login">去登录</a></p>
+      <p id="message" class="post-meta"></p>
+    </form>
+  </section>
+
+  <script is:inline>
+    const form = document.getElementById('register-form');
+    const message = document.getElementById('message');
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const fd = new FormData(form);
+      const nickname = String(fd.get('nickname') || '');
+      const account = String(fd.get('account') || '');
+      const password = String(fd.get('password') || '');
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ nickname, account, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        message.textContent = data.message || '注册失败';
+        return;
+      }
+      location.href = '/admin';
+    });
+  </script>
+</BaseLayout>

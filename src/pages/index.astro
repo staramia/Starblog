@@ -1,13 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getPostDates, getPostSlug, getPublishedPosts } from '../lib/posts';
+import { getPostAuthorName, getPostDates, getPostSlug, getPublishedPosts } from '../lib/posts';
 
 const posts = await getPublishedPosts();
 const latest = posts.slice(0, 6);
 const totalPosts = posts.length;
-const categories = new Set(
-  posts.map((post) => (post.data.advanced?.discriminant ? post.data.advanced.value?.category || '未分类' : '未分类'))
-).size;
+const authors = new Set(await Promise.all(posts.map((post) => getPostAuthorName(post)))).size;
 const tags = new Set(
   posts.flatMap((post) => (post.data.advanced?.discriminant ? post.data.advanced.value?.tags || [] : []))
 ).size;
@@ -17,40 +15,54 @@ function displayDate(post: { data: { publishedAt?: Date } }) {
 }
 
 const publishedDateMap = new Map<string, string>();
+const authorMap = new Map<string, string>();
 for (const post of latest) {
+  const slug = getPostSlug(post);
   const { publishedAt } = await getPostDates(post);
-  publishedDateMap.set(getPostSlug(post), publishedAt.toLocaleString('zh-CN', { hour12: false }));
+  publishedDateMap.set(slug, publishedAt.toLocaleString('zh-CN', { hour12: false }));
+  authorMap.set(slug, await getPostAuthorName(post));
 }
 
 function titleOf(post: { data: { title: string | { name: string } } }) {
   return typeof post.data.title === 'string' ? post.data.title : post.data.title.name;
 }
 
-function categoryOf(post: {
-  data: { advanced?: { discriminant?: boolean; value?: { category?: string; tags?: string[]; excerpt?: string } } };
-}) {
-  return post.data.advanced?.discriminant ? post.data.advanced.value?.category || '未分类' : '未分类';
-}
-
 function tagsOf(post: { data: { advanced?: { discriminant?: boolean; value?: { tags?: string[] } } } }) {
   return post.data.advanced?.discriminant ? post.data.advanced.value?.tags || [] : [];
 }
 
-function excerptOf(post: { data: { advanced?: { discriminant?: boolean; value?: { excerpt?: string } } } }) {
-  return post.data.advanced?.discriminant ? post.data.advanced.value?.excerpt || '' : '';
+function excerptOf(post: {
+  body?: string;
+  data: { advanced?: { discriminant?: boolean; value?: { excerpt?: string } } };
+}) {
+  const manual = post.data.advanced?.discriminant ? post.data.advanced.value?.excerpt || '' : '';
+  if (manual.trim()) return manual.trim();
+
+  const source = String(post.body || '');
+  const plain = source
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[[^\]]*\]\([^)]*\)/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/^>\s?/gm, '')
+    .replace(/[*_~>-]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  return plain.slice(0, 110);
 }
 ---
 
 <BaseLayout title="Starblog | 首页" description="一个支持可视化编辑与自动部署的 Astro 个人博客。">
   <section class="hero">
-    <span class="hero-eyebrow">Astro + Keystatic + Cloudflare</span>
-    <h1>写作像 Word 一样顺滑，发布像 Git 一样可靠</h1>
+    <h1>星梦祈雪的博客平台</h1>
     <p>
-      基于 Astro + Keystatic + Cloudflare Pages，提供极速加载、SEO 友好、全免费托管的个人博客体验。
+      关注星梦祈雪喵，关注星梦祈雪谢谢喵。
     </p>
     <div class="hero-actions">
-      <a class="btn btn-primary" href="/keystatic">开始写作</a>
-      <a class="btn btn-secondary" href="/archives">浏览归档</a>
+      <a class="btn btn-primary" href="/admin/posts">开始写作</a>
+      <a class="btn btn-secondary" href="/nav">浏览导航</a>
     </div>
     <div class="stats-grid">
       <div class="stat">
@@ -58,8 +70,8 @@ function excerptOf(post: { data: { advanced?: { discriminant?: boolean; value?: 
         <p class="stat-label">已发布文章</p>
       </div>
       <div class="stat">
-        <p class="stat-value">{categories}</p>
-        <p class="stat-label">分类数量</p>
+        <p class="stat-value">{authors}</p>
+        <p class="stat-label">作者数量</p>
       </div>
       <div class="stat">
         <p class="stat-value">{tags}</p>
@@ -71,14 +83,13 @@ function excerptOf(post: { data: { advanced?: { discriminant?: boolean; value?: 
   <section>
     <div class="section-title">
       <h2>最新文章</h2>
-      <a href="/archives">查看全部</a>
     </div>
     <div class="post-grid">
       {latest.map((post) => (
         <article class="post-card">
           <h2><a href={`/posts/${getPostSlug(post)}`}>{titleOf(post)}</a></h2>
           <p class="post-meta">
-            {categoryOf(post)} · {publishedDateMap.get(getPostSlug(post)) || displayDate(post)}
+            {authorMap.get(getPostSlug(post)) || '系统'} · {publishedDateMap.get(getPostSlug(post)) || displayDate(post)}
           </p>
           {excerptOf(post) && <p class="post-excerpt">{excerptOf(post)}</p>}
           <div class="chips">
@@ -92,7 +103,7 @@ function excerptOf(post: { data: { advanced?: { discriminant?: boolean; value?: 
     {latest.length === 0 && (
       <div class="empty-state">
         <p>还没有发布的文章，先去后台写第一篇吧。</p>
-        <a class="btn btn-primary" href="/keystatic">前往内容后台</a>
+        <a class="btn btn-primary" href="/admin/posts">前往创作者后台</a>
       </div>
     )}
   </section>

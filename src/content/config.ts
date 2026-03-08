@@ -7,6 +7,8 @@ const posts = defineCollection({
     base: './src/content/posts',
   }),
   schema: z.object({
+    authorId: z.string().optional(),
+    postCategory: z.enum(['article', 'report']).optional(),
     title: z.union([
       z.string().min(1).max(120),
       z.object({
@@ -21,7 +23,6 @@ const posts = defineCollection({
           .object({
             excerpt: z.string().max(200).optional(),
             cover: z.string().optional(),
-            category: z.string().optional(),
             tags: z.array(z.string()).max(8).optional(),
             status: z.enum(['draft', 'published']).optional(),
             seoTitle: z.string().optional(),

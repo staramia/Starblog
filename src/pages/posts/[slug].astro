@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getPostDates, getPostSlug, getPublishedPosts } from '../../lib/posts';
+import { getPostAuthorName, getPostDates, getPostSlug, getPublishedPosts } from '../../lib/posts';
 import { render } from 'astro:content';
 
 export const prerender = true;
@@ -24,7 +24,7 @@ const canonical = post.data.advanced?.discriminant ? post.data.advanced.value?.c
 const { publishedAt, updatedAt } = await getPostDates(post);
 const publishedDate = publishedAt.toLocaleString('zh-CN', { hour12: false });
 const updatedDate = updatedAt.toLocaleString('zh-CN', { hour12: false });
-const category = post.data.advanced?.discriminant ? post.data.advanced.value?.category || '未分类' : '未分类';
+const authorName = await getPostAuthorName(post);
 const tags = post.data.advanced?.discriminant ? post.data.advanced.value?.tags || [] : [];
 ---
 
@@ -33,7 +33,7 @@ const tags = post.data.advanced?.discriminant ? post.data.advanced.value?.tags |
     <header class="article-header">
       <h1>{title}</h1>
       <p class="post-meta">
-        {category} · 发布于 {publishedDate} · 更新于 {updatedDate}
+        {authorName} · 发布于 {publishedDate} · 更新于 {updatedDate}
       </p>
       <div class="chips">
         {tags.map((tag: string) => (

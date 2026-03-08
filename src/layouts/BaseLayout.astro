@@ -13,35 +13,34 @@ const {
   canonical,
 } = Astro.props;
 
+const browserTitle = 'Starblog';
+
 const currentUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
 const canonicalUrl = canonical ?? currentUrl;
 const currentPath = Astro.url.pathname;
 const navItems = [
   { href: '/', label: '首页', match: '/' },
-  { href: '/archives', label: '归档', match: '/archives' },
-  { href: '/about', label: '关于', match: '/about' },
+  { href: '/nav', label: '导航', match: '/nav' },
+  { href: '/posts', label: '文库', match: '/posts' },
+  { href: '/admin/posts/new', label: '创作', match: '/admin/posts/new', exact: true },
+  { href: '/admin/posts', label: '管理', match: '/admin/posts', exact: true },
+  { href: '/admin', label: '主页', match: '/admin', exact: true },
 ];
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-ui="linen">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
+    <title>{browserTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
+    <meta property="og:title" content={browserTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta name="twitter:card" content="summary_large_image" />
-    <script is:inline>
-      const persisted = localStorage.getItem('theme');
-      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const theme = persisted || (systemDark ? 'dark' : 'light');
-      document.documentElement.dataset.theme = theme;
-    </script>
   </head>
   <body>
     <a href="#main-content" class="skip-link">跳到正文</a>
@@ -54,9 +53,11 @@ const navItems = [
         <nav class="nav" aria-label="主导航">
           {navItems.map((item) => {
             const isActive =
-              item.match === '/'
-                ? currentPath === '/'
-                : currentPath === item.match || currentPath.startsWith(`${item.match}/`);
+              item.exact === true
+                ? currentPath === item.match
+                : item.match === '/'
+                  ? currentPath === '/'
+                  : currentPath === item.match || currentPath.startsWith(`${item.match}/`);
             return (
               <a href={item.href} aria-current={isActive ? 'page' : undefined} class={isActive ? 'is-active' : ''}>
                 {item.label}
@@ -65,10 +66,12 @@ const navItems = [
           })}
         </nav>
         <div class="header-actions">
-          <a href="/keystatic" class="admin-link">内容后台</a>
-          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换主题" aria-pressed="false">
-            <span id="theme-icon" aria-hidden="true">◐</span>
-          </button>
+          <div class="auth-controls" id="auth-controls" data-auth-ready="false">
+            <span class="auth-user" id="auth-user" hidden></span>
+            <a href="/admin/login" class="auth-link" id="auth-login" hidden>登录</a>
+            <a href="/admin/register" class="auth-link" id="auth-register" hidden>注册</a>
+            <button class="auth-logout" id="auth-logout" type="button" hidden>退出登录</button>
+          </div>
         </div>
       </div>
     </header>
@@ -76,27 +79,46 @@ const navItems = [
       <slot />
     </main>
     <script is:inline>
-      const button = document.getElementById('theme-toggle');
-      const icon = document.getElementById('theme-icon');
+      const authUser = document.getElementById('auth-user');
+      const authLogin = document.getElementById('auth-login');
+      const authRegister = document.getElementById('auth-register');
+      const authLogout = document.getElementById('auth-logout');
+      const authControls = document.getElementById('auth-controls');
 
-      function syncThemeControl(theme) {
-        const isDark = theme === 'dark';
-        if (icon) icon.textContent = isDark ? '☀' : '☾';
-        if (button) {
-          button.setAttribute('aria-pressed', String(isDark));
-          button.setAttribute('aria-label', isDark ? '切换到浅色模式' : '切换到深色模式');
+      async function syncAuthControls() {
+        const applyState = (authenticated, userLabel) => {
+          if (authUser) {
+            authUser.textContent = userLabel || '';
+            authUser.hidden = !authenticated;
+          }
+          if (authLogout) authLogout.hidden = !authenticated;
+          if (authLogin) authLogin.hidden = authenticated;
+          if (authRegister) authRegister.hidden = authenticated;
+        };
+
+        applyState(false, '');
+
+        try {
+          const res = await fetch('/api/auth/me');
+          const data = await res.json();
+          if (data.authenticated) {
+            applyState(true, data.user?.nickname || data.user?.username || '已登录');
+          } else {
+            applyState(false, '');
+          }
+        } catch {
+          applyState(false, '');
+        } finally {
+          authControls?.setAttribute('data-auth-ready', 'true');
         }
       }
 
-      syncThemeControl(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
-
-      button?.addEventListener('click', () => {
-        const current = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
-        const next = current === 'dark' ? 'light' : 'dark';
-        document.documentElement.dataset.theme = next;
-        localStorage.setItem('theme', next);
-        syncThemeControl(next);
+      authLogout?.addEventListener('click', async () => {
+        await fetch('/api/auth/logout', { method: 'POST' });
+        location.reload();
       });
+
+      syncAuthControls();
     </script>
   </body>
 </html>

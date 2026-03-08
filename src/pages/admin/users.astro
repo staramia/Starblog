@@ -1,0 +1,167 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="用户管理 | 创作者后台" description="管理员用户管理页面。">
+  <section class="article">
+    <div class="section-title">
+      <h1>用户管理</h1>
+      <a class="btn btn-secondary" href="/admin">返回主页</a>
+    </div>
+    <p id="status" class="post-meta">加载中...</p>
+    <div class="table-wrap">
+      <table class="admin-table" id="users-table">
+        <thead>
+          <tr>
+            <th>用户名</th>
+            <th>账号</th>
+            <th>角色</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="users-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <script is:inline>
+    const statusEl = document.getElementById('status');
+    const tbody = document.getElementById('users-tbody');
+
+    async function ensureAdmin() {
+      const res = await fetch('/api/auth/me');
+      const data = await res.json();
+      if (!data.authenticated) {
+        location.href = '/admin/login';
+        return false;
+      }
+      if (data.user.role !== 'admin') {
+        statusEl.textContent = '仅管理员可访问该页面。';
+        return false;
+      }
+      return true;
+    }
+
+    async function loadUsers() {
+      const res = await fetch('/api/admin/users');
+      const data = await res.json();
+      if (!res.ok) {
+        statusEl.textContent = data.message || '加载失败';
+        return;
+      }
+
+      const users = data.users || [];
+      statusEl.textContent = `共 ${users.length} 个账号`;
+      tbody.innerHTML = users
+        .map(
+          (user) => `
+            <tr>
+              <td>${user.nickname}</td>
+              <td>${user.username}</td>
+              <td>
+                ${user.role === 'admin' ? 'admin' : `<select class="role-select" data-role-id="${user.id}"><option value="author" ${user.role === 'author' ? 'selected' : ''}>author</option><option value="bot" ${user.role === 'bot' ? 'selected' : ''}>bot</option></select>`}
+              </td>
+              <td>
+                <button class="btn btn-danger" data-delete="${user.id}" type="button">注销</button>
+              </td>
+            </tr>`
+        )
+        .join('');
+    }
+
+    function openConfirm(message) {
+      return new Promise((resolve) => {
+        const dialog = document.getElementById('confirm-dialog');
+        const text = document.getElementById('confirm-text');
+        const okBtn = document.getElementById('confirm-ok');
+        const cancelBtn = document.getElementById('confirm-cancel');
+        if (!(dialog instanceof HTMLDialogElement) || !text || !okBtn || !cancelBtn) {
+          resolve(confirm(message));
+          return;
+        }
+
+        text.textContent = message;
+
+        const cleanup = () => {
+          okBtn.removeEventListener('click', onOk);
+          cancelBtn.removeEventListener('click', onCancel);
+          dialog.removeEventListener('cancel', onCancel);
+          dialog.close();
+        };
+
+        const onOk = () => {
+          cleanup();
+          resolve(true);
+        };
+
+        const onCancel = (event) => {
+          event?.preventDefault?.();
+          cleanup();
+          resolve(false);
+        };
+
+        okBtn.addEventListener('click', onOk);
+        cancelBtn.addEventListener('click', onCancel);
+        dialog.addEventListener('cancel', onCancel);
+        dialog.showModal();
+      });
+    }
+
+    async function removeUser(id) {
+      const confirmed = await openConfirm('确认注销该账号吗？此操作不可撤销。');
+      if (!confirmed) return;
+      const res = await fetch(`/api/admin/users/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (!res.ok) {
+        statusEl.textContent = data.message || '注销失败';
+        return;
+      }
+      await loadUsers();
+    }
+
+    async function updateRole(id, role) {
+      const res = await fetch(`/api/admin/users/${id}`, {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ role }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        statusEl.textContent = data.message || '角色更新失败';
+        await loadUsers();
+        return;
+      }
+      statusEl.textContent = '角色已更新';
+    }
+
+    tbody?.addEventListener('click', async (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      const id = target.getAttribute('data-delete');
+      if (id) await removeUser(id);
+    });
+
+    tbody?.addEventListener('change', async (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLSelectElement)) return;
+      const id = target.getAttribute('data-role-id');
+      if (!id) return;
+      await updateRole(id, target.value);
+    });
+
+    (async () => {
+      const ok = await ensureAdmin();
+      if (!ok) return;
+      await loadUsers();
+    })();
+  </script>
+
+  <dialog id="confirm-dialog" class="confirm-dialog">
+    <h2>确认操作</h2>
+    <p id="confirm-text" class="post-meta">确认继续吗？</p>
+    <div class="hero-actions">
+      <button id="confirm-cancel" class="btn btn-secondary" type="button">取消</button>
+      <button id="confirm-ok" class="btn btn-danger" type="button">确认注销</button>
+    </div>
+  </dialog>
+</BaseLayout>

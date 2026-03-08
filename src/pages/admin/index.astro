@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="创作者后台" description="独立创作者后台首页。">
+  <section class="article">
+    <h1 id="admin-title">我的主页</h1>
+    <p id="welcome" class="post-meta">正在检查登录状态...</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/admin/posts/new">新建文章</a>
+      <a class="btn btn-primary" href="/admin/posts">文章管理</a>
+      <a class="btn btn-secondary" href="/admin/users" id="users-btn" hidden>用户管理</a>
+    </div>
+  </section>
+
+  <script is:inline>
+    const welcome = document.getElementById('welcome');
+    const title = document.getElementById('admin-title');
+    const usersBtn = document.getElementById('users-btn');
+    async function loadMe() {
+      const res = await fetch('/api/auth/me');
+      const data = await res.json();
+      if (!data.authenticated) {
+        location.href = '/admin/login';
+        return;
+      }
+      const displayName = data.user.nickname || data.user.username || '用户';
+      if (title) title.textContent = `${displayName}的主页`;
+      welcome.textContent = `你好，${data.user.nickname}（${data.user.role}）`;
+      if (usersBtn) usersBtn.hidden = data.user.role !== 'admin';
+    }
+
+    loadMe();
+  </script>
+</BaseLayout>

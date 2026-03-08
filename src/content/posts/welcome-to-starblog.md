@@ -1,13 +1,13 @@
 ---
-title:
-  name: "欢迎来到 Starblog"
-  slug: "welcome-to-starblog"
+authorId: "system"
+title: "欢迎来到 Starblog"
+publishedAt: "2026-03-08T06:00:00.000Z"
+updatedAt: "2026-03-08T06:00:00.000Z"
 advanced:
   discriminant: true
   value:
     excerpt: "这是第一篇示例文章，用于验证 Keystatic 到 Astro 的完整发布链路。"
     cover: "/uploads/demo-cover.svg"
-    category: "公告"
     tags: ["Astro", "Keystatic", "Cloudflare"]
     status: "published"
     seoTitle: "欢迎来到 Starblog：零成本可视化博客"
@@ -19,7 +19,7 @@ advanced:
 
 这个项目用于验证以下能力：
 
-- 可视化后台编辑（`/keystatic`）
+- 独立创作者后台编辑（`/admin/posts`）
 - GitHub 模式发布提交
 - Cloudflare Pages 自动构建部署
 

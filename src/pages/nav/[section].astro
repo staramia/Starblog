@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { navSections } from '../../lib/nav-sections';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  return navSections
+    .filter((section) => section.key !== 'notes' && section.key !== 'reports')
+    .map((section) => ({
+      params: { section: section.key },
+      props: { section },
+    }));
+}
+
+const { section } = Astro.props;
+---
+
+<BaseLayout title={`${section.title} | 导航`} description={section.summary}>
+  <div class="nav-shell">
+    <aside class="nav-sidebar">
+      <h2><a href="/nav" class="nav-home-link">导航栏</a></h2>
+      <ul>
+        {navSections.map((item) => (
+          <li>
+            <a href={item.key === 'notes' ? '/nav/notes' : `/nav/${item.key}`} class={item.key === section.key ? 'is-active' : ''}>
+              {item.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </aside>
+    <section class="article nav-content">
+      <div class="section-title">
+        <h1>{section.title}</h1>
+        <a href="/nav">返回导航</a>
+      </div>
+      <p class="nav-section-summary">{section.summary}</p>
+      <ul class="list-board">
+        {section.examples.map((item: string) => (
+          <li class="list-item">
+            <strong>{item}</strong>
+            <span class="post-meta">建议在该板块下持续沉淀内容。</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</BaseLayout>

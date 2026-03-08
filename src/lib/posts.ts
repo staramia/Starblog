@@ -16,12 +16,29 @@ export function getPostSlug(post: {
   return filename.replace(/\.(md|mdoc)$/i, '');
 }
 
+async function getUserMap() {
+  try {
+    const file = path.join(process.cwd(), '.data', 'users.json');
+    const raw = await fs.readFile(file, 'utf-8');
+    const users = JSON.parse(raw) as Array<{ id: string; nickname?: string; username?: string }>;
+    return new Map(users.map((user) => [user.id, user.nickname || user.username || '系统']));
+  } catch {
+    return new Map<string, string>();
+  }
+}
+
+export async function getPostAuthorName(post: { data: { authorId?: string } }) {
+  const authorId = post.data.authorId;
+  if (!authorId) return '系统';
+  const map = await getUserMap();
+  return map.get(authorId) || '系统';
+}
+
 function readAdvanced(post: {
   data: {
     advanced?: {
       discriminant?: boolean;
       value?: {
-        category?: string;
         tags?: string[];
         status?: 'draft' | 'published';
       };
@@ -93,13 +110,9 @@ export async function getPublishedPosts() {
   return postsWithTimestamp.map((item) => item.post);
 }
 
-export function groupByCategory(posts: Awaited<ReturnType<typeof getPublishedPosts>>) {
-  return posts.reduce<Record<string, typeof posts>>((acc, post) => {
-    const key = readAdvanced(post)?.category || '未分类';
-    acc[key] ??= [];
-    acc[key].push(post);
-    return acc;
-  }, {});
+export async function getPublishedPostsByCategory(category: 'article' | 'report') {
+  const posts = await getPublishedPosts();
+  return posts.filter((post) => (post.data.postCategory || 'article') === category);
 }
 
 export function groupByTag(posts: Awaited<ReturnType<typeof getPublishedPosts>>) {
