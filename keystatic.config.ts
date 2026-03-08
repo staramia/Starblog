@@ -1,110 +1,116 @@
 import { collection, config, fields, singleton } from '@keystatic/core';
 
 const repo = import.meta.env.PUBLIC_KEYSTATIC_GITHUB_REPO || 'owner/repo';
+const storageMode = import.meta.env.PUBLIC_KEYSTATIC_STORAGE || (import.meta.env.DEV ? 'local' : 'github');
 
 export default config({
-  storage: {
-    kind: 'github',
-    repo,
-  },
+  storage:
+    storageMode === 'github'
+      ? {
+          kind: 'github',
+          repo,
+        }
+      : {
+          kind: 'local',
+        },
   ui: {
     brand: {
-      name: 'Starblog CMS',
+      name: 'Starblog 内容管理',
     },
     navigation: {
-      Posts: ['posts'],
-      Settings: ['site'],
+      内容: ['posts'],
+      设置: ['site'],
     },
   },
   collections: {
     posts: collection({
-      label: 'Posts',
-      path: 'src/content/posts/*.md',
+      label: '文章',
+      slugField: 'title',
+      path: 'src/content/posts/*',
       format: {
         contentField: 'content',
+        data: 'yaml',
       },
-      entryLayout: [
-        'title',
-        'status',
-        'slug',
-        'category',
-        'tags',
-        'publishedAt',
-        'updatedAt',
-        'excerpt',
-        'cover',
-        'seoTitle',
-        'seoDescription',
-        'canonical',
-        'content',
-      ],
+      entryLayout: ['title', 'content', 'advanced'],
       schema: {
-        title: fields.text({
-          label: 'Title',
-          description: 'Article title shown in listings and pages.',
-          validation: { isRequired: true, length: { min: 1, max: 120 } },
+        title: fields.slug({
+          name: {
+            label: '标题',
+            description: '用于列表与详情页展示，建议简洁明确。',
+            validation: { isRequired: true, length: { min: 1, max: 120 } },
+          },
+          slug: {
+            label: 'Slug',
+            description: '用于文章 URL，例如：astro-keystatic-setup',
+          },
         }),
-        slug: fields.text({
-          label: 'Slug',
-          description: 'Used in URL. Example: astro-keystatic-setup',
-          validation: { isRequired: true },
-        }),
-        excerpt: fields.text({
-          label: 'Excerpt',
-          multiline: true,
-          validation: { isRequired: false, length: { max: 200 } },
-        }),
-        cover: fields.image({
-          label: 'Cover',
-          directory: 'public/uploads',
-          publicPath: '/uploads/',
-        }),
-        category: fields.text({
-          label: 'Category',
-          validation: { isRequired: true },
-        }),
-        tags: fields.array(
-          fields.text({
-            label: 'Tag',
-            validation: { isRequired: true },
+        advanced: fields.conditional(
+          fields.checkbox({
+            label: '显示高级设置',
+            defaultValue: false,
           }),
           {
-            label: 'Tags',
-            itemLabel: (props) => props.value || 'Tag',
-            validation: { length: { max: 8 } },
+            false: fields.empty(),
+            true: fields.object(
+              {
+                excerpt: fields.text({
+                  label: '摘要',
+                  multiline: true,
+                  validation: { isRequired: false, length: { max: 200 } },
+                }),
+                cover: fields.image({
+                  label: '封面图',
+                  directory: 'public/uploads',
+                  publicPath: '/uploads/',
+                }),
+                category: fields.text({
+                  label: '分类',
+                  defaultValue: '未分类',
+                  validation: { isRequired: false },
+                }),
+                tags: fields.array(
+                  fields.text({
+                    label: '标签',
+                    validation: { isRequired: true },
+                  }),
+                  {
+                    label: '标签列表',
+                    itemLabel: (props) => props.value || '新标签',
+                    validation: { length: { max: 8 } },
+                  }
+                ),
+                status: fields.select({
+                  label: '状态',
+                  options: [
+                    { label: '草稿', value: 'draft' },
+                    { label: '已发布', value: 'published' },
+                  ],
+                  defaultValue: 'published',
+                }),
+                seoTitle: fields.text({
+                  label: 'SEO 标题',
+                  validation: { isRequired: false },
+                }),
+                seoDescription: fields.text({
+                  label: 'SEO 描述',
+                  multiline: true,
+                  validation: { isRequired: false, length: { max: 160 } },
+                }),
+                canonical: fields.url({
+                  label: '规范链接 Canonical URL',
+                  validation: { isRequired: false },
+                }),
+              },
+              {
+                label: '高级设置',
+              }
+            ),
           }
         ),
-        status: fields.select({
-          label: 'Status',
-          options: [
-            { label: 'Draft', value: 'draft' },
-            { label: 'Published', value: 'published' },
-          ],
-          defaultValue: 'draft',
-        }),
-        publishedAt: fields.datetime({
-          label: 'Published At',
-          validation: { isRequired: false },
-        }),
-        updatedAt: fields.datetime({
-          label: 'Updated At',
-          validation: { isRequired: false },
-        }),
-        seoTitle: fields.text({
-          label: 'SEO Title',
-          validation: { isRequired: false },
-        }),
-        seoDescription: fields.text({
-          label: 'SEO Description',
-          multiline: true,
-          validation: { isRequired: false, length: { max: 160 } },
-        }),
-        canonical: fields.url({
-          label: 'Canonical URL',
-          validation: { isRequired: false },
-        }),
+        publishedAt: fields.ignored(),
+        updatedAt: fields.ignored(),
         content: fields.document({
-          label: 'Content',
+          label: '正文内容',
           formatting: true,
           links: true,
           dividers: true,
@@ -118,15 +124,15 @@ export default config({
   },
   singletons: {
     site: singleton({
-      label: 'Site Settings',
+      label: '站点设置',
       path: 'src/content/site/settings',
       schema: {
         siteName: fields.text({
-          label: 'Site Name',
+          label: '站点名称',
           validation: { isRequired: true },
         }),
         siteDescription: fields.text({
-          label: 'Site Description',
+          label: '站点描述',
           multiline: true,
           validation: { isRequired: true },
         }),

@@ -5,37 +5,85 @@
       "type": "object",
       "properties": {
         "title": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 120
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                },
+                "slug": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "name",
+                "slug"
+              ],
+              "additionalProperties": false
+            }
+          ]
         },
-        "excerpt": {
-          "type": "string",
-          "maxLength": 200,
-          "default": ""
-        },
-        "cover": {
-          "type": "string"
-        },
-        "category": {
-          "type": "string",
-          "minLength": 1
-        },
-        "tags": {
-          "type": "array",
-          "items": {
-            "type": "string"
+        "advanced": {
+          "type": "object",
+          "properties": {
+            "discriminant": {
+              "type": "boolean"
+            },
+            "value": {
+              "type": "object",
+              "properties": {
+                "excerpt": {
+                  "type": "string",
+                  "maxLength": 200
+                },
+                "cover": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "maxItems": 8
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "draft",
+                    "published"
+                  ]
+                },
+                "seoTitle": {
+                  "type": "string"
+                },
+                "seoDescription": {
+                  "type": "string",
+                  "maxLength": 160
+                },
+                "canonical": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "additionalProperties": false
+            }
           },
-          "maxItems": 8,
-          "default": []
-        },
-        "status": {
-          "type": "string",
-          "enum": [
-            "draft",
-            "published"
+          "required": [
+            "discriminant"
           ],
-          "default": "draft"
+          "additionalProperties": false
         },
         "publishedAt": {
           "anyOf": [
@@ -69,24 +117,12 @@
             }
           ]
         },
-        "seoTitle": {
-          "type": "string"
-        },
-        "seoDescription": {
-          "type": "string",
-          "maxLength": 160
-        },
-        "canonical": {
-          "type": "string",
-          "format": "uri"
-        },
         "$schema": {
           "type": "string"
         }
       },
       "required": [
-        "title",
-        "category"
+        "title"
       ],
       "additionalProperties": false
     }

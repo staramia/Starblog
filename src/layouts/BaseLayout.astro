@@ -15,6 +15,12 @@ const {
 
 const currentUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
 const canonicalUrl = canonical ?? currentUrl;
+const currentPath = Astro.url.pathname;
+const navItems = [
+  { href: '/', label: '首页', match: '/' },
+  { href: '/archives', label: '归档', match: '/archives' },
+  { href: '/about', label: '关于', match: '/about' },
+];
 ---
 
 <!doctype html>
@@ -38,6 +44,7 @@ const canonicalUrl = canonical ?? currentUrl;
     </script>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">跳到正文</a>
     <header class="site-header">
       <div class="container header-inner">
         <div class="brand-wrap">
@@ -45,8 +52,17 @@ const canonicalUrl = canonical ?? currentUrl;
           <span class="brand-subtitle">个人知识博客</span>
         </div>
         <nav class="nav" aria-label="主导航">
-          <a href="/archives">归档</a>
-          <a href="/about">关于</a>
+          {navItems.map((item) => {
+            const isActive =
+              item.match === '/'
+                ? currentPath === '/'
+                : currentPath === item.match || currentPath.startsWith(`${item.match}/`);
+            return (
+              <a href={item.href} aria-current={isActive ? 'page' : undefined} class={isActive ? 'is-active' : ''}>
+                {item.label}
+              </a>
+            );
+          })}
         </nav>
         <div class="header-actions">
           <a href="/keystatic" class="admin-link">内容后台</a>
@@ -56,14 +72,9 @@ const canonicalUrl = canonical ?? currentUrl;
         </div>
       </div>
     </header>
-    <main class="container main-content">
+    <main id="main-content" class="container main-content">
       <slot />
     </main>
-    <footer class="site-footer">
-      <div class="container">
-        <p>© {new Date().getFullYear()} Starblog. Built with Astro + Keystatic + Cloudflare.</p>
-      </div>
-    </footer>
     <script is:inline>
       const button = document.getElementById('theme-toggle');
       const icon = document.getElementById('theme-icon');

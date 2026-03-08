@@ -1,34 +1,99 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getPublishedPosts } from '../lib/posts';
+import { getPostDates, getPostSlug, getPublishedPosts } from '../lib/posts';
 
 const posts = await getPublishedPosts();
+const latest = posts.slice(0, 6);
+const totalPosts = posts.length;
+const categories = new Set(
+  posts.map((post) => (post.data.advanced?.discriminant ? post.data.advanced.value?.category || '未分类' : '未分类'))
+).size;
+const tags = new Set(
+  posts.flatMap((post) => (post.data.advanced?.discriminant ? post.data.advanced.value?.tags || [] : []))
+).size;
+
+function displayDate(post: { data: { publishedAt?: Date } }) {
+  return (post.data.publishedAt || new Date()).toLocaleString('zh-CN', { hour12: false });
+}
+
+const publishedDateMap = new Map<string, string>();
+for (const post of latest) {
+  const { publishedAt } = await getPostDates(post);
+  publishedDateMap.set(getPostSlug(post), publishedAt.toLocaleString('zh-CN', { hour12: false }));
+}
+
+function titleOf(post: { data: { title: string | { name: string } } }) {
+  return typeof post.data.title === 'string' ? post.data.title : post.data.title.name;
+}
+
+function categoryOf(post: {
+  data: { advanced?: { discriminant?: boolean; value?: { category?: string; tags?: string[]; excerpt?: string } } };
+}) {
+  return post.data.advanced?.discriminant ? post.data.advanced.value?.category || '未分类' : '未分类';
+}
+
+function tagsOf(post: { data: { advanced?: { discriminant?: boolean; value?: { tags?: string[] } } } }) {
+  return post.data.advanced?.discriminant ? post.data.advanced.value?.tags || [] : [];
+}
+
+function excerptOf(post: { data: { advanced?: { discriminant?: boolean; value?: { excerpt?: string } } } }) {
+  return post.data.advanced?.discriminant ? post.data.advanced.value?.excerpt || '' : '';
+}
 ---
 
 <BaseLayout title="Starblog | 首页" description="一个支持可视化编辑与自动部署的 Astro 个人博客。">
   <section class="hero">
+    <span class="hero-eyebrow">Astro + Keystatic + Cloudflare</span>
     <h1>写作像 Word 一样顺滑，发布像 Git 一样可靠</h1>
     <p>
       基于 Astro + Keystatic + Cloudflare Pages，提供极速加载、SEO 友好、全免费托管的个人博客体验。
     </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/keystatic">开始写作</a>
+      <a class="btn btn-secondary" href="/archives">浏览归档</a>
+    </div>
+    <div class="stats-grid">
+      <div class="stat">
+        <p class="stat-value">{totalPosts}</p>
+        <p class="stat-label">已发布文章</p>
+      </div>
+      <div class="stat">
+        <p class="stat-value">{categories}</p>
+        <p class="stat-label">分类数量</p>
+      </div>
+      <div class="stat">
+        <p class="stat-value">{tags}</p>
+        <p class="stat-label">标签数量</p>
+      </div>
+    </div>
   </section>
 
   <section>
+    <div class="section-title">
+      <h2>最新文章</h2>
+      <a href="/archives">查看全部</a>
+    </div>
     <div class="post-grid">
-      {posts.map((post) => (
+      {latest.map((post) => (
         <article class="post-card">
-          <h2><a href={`/posts/${post.slug}`}>{post.data.title}</a></h2>
+          <h2><a href={`/posts/${getPostSlug(post)}`}>{titleOf(post)}</a></h2>
           <p class="post-meta">
-            {post.data.publishedAt?.toLocaleDateString('zh-CN')} · {post.data.category}
+            {categoryOf(post)} · {publishedDateMap.get(getPostSlug(post)) || displayDate(post)}
           </p>
-          {post.data.excerpt && <p>{post.data.excerpt}</p>}
+          {excerptOf(post) && <p class="post-excerpt">{excerptOf(post)}</p>}
           <div class="chips">
-            {post.data.tags.map((tag) => (
+            {tagsOf(post).map((tag) => (
               <a class="chip" href={`/tags/${encodeURIComponent(tag)}`}>#{tag}</a>
             ))}
           </div>
         </article>
       ))}
     </div>
+    {latest.length === 0 && (
+      <div class="empty-state">
+        <p>还没有发布的文章，先去后台写第一篇吧。</p>
+        <a class="btn btn-primary" href="/keystatic">前往内容后台</a>
+      </div>
+    )}
   </section>
 </BaseLayout>

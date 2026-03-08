@@ -3,7 +3,7 @@
       const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       const theme = persisted || (systemDark ? 'dark' : 'light');
       document.documentElement.dataset.theme = theme;
-    </script><link rel="stylesheet" href="/_astro/about.CB6SJhtO.css"></head> <body> <header class="site-header"> <div class="container header-inner"> <div class="brand-wrap"> <a href="/" class="brand">Starblog</a> <span class="brand-subtitle">个人知识博客</span> </div> <nav class="nav" aria-label="主导航"> <a href="/archives">归档</a> <a href="/about">关于</a> </nav> <div class="header-actions"> <a href="/keystatic" class="admin-link">内容后台</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换主题" aria-pressed="false"> <span id="theme-icon" aria-hidden="true">◐</span> </button> </div> </div> </header> <main class="container main-content">  <article class="article"> <h1>欢迎来到 Starblog</h1> <p class="post-meta"> 2026/3/8 · 公告 </p> <div class="chips"> <a class="chip" href="/tags/Astro">#Astro</a><a class="chip" href="/tags/Keystatic">#Keystatic</a><a class="chip" href="/tags/Cloudflare">#Cloudflare</a> </div> <hr> <p>欢迎使用 Starblog。</p>
+    </script><link rel="stylesheet" href="/_astro/about.DXjD8bAg.css"></head> <body> <a href="#main-content" class="skip-link">跳到正文</a> <header class="site-header"> <div class="container header-inner"> <div class="brand-wrap"> <a href="/" class="brand">Starblog</a> <span class="brand-subtitle">个人知识博客</span> </div> <nav class="nav" aria-label="主导航"> <a href="/" class> 首页 </a><a href="/archives" class> 归档 </a><a href="/about" class> 关于 </a> </nav> <div class="header-actions"> <a href="/keystatic" class="admin-link">内容后台</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换主题" aria-pressed="false"> <span id="theme-icon" aria-hidden="true">◐</span> </button> </div> </div> </header> <main id="main-content" class="container main-content">  <article class="article"> <header class="article-header"> <h1>欢迎来到 Starblog</h1> <p class="post-meta"> 公告 · 发布于 2026/3/8 10:26:48 · 更新于 2026/3/8 11:58:35 </p> <div class="chips"> <a class="chip" href="/tags/Astro">#Astro</a><a class="chip" href="/tags/Keystatic">#Keystatic</a><a class="chip" href="/tags/Cloudflare">#Cloudflare</a> </div> </header> <hr> <p>欢迎使用 Starblog。</p>
 <p>这个项目用于验证以下能力：</p>
 <ul>
 <li>可视化后台编辑（<code>/keystatic</code>）</li>
@@ -16,7 +16,7 @@
 <span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
 <blockquote>
 <p>如果你正在阅读这篇文章，说明前台路由与 Markdown 渲染已经生效。</p>
-</blockquote> </article>  </main> <footer class="site-footer"> <div class="container"> <p>© 2026 Starblog. Built with Astro + Keystatic + Cloudflare.</p> </div> </footer> <script>
+</blockquote> </article>  </main> <script>
       const button = document.getElementById('theme-toggle');
       const icon = document.getElementById('theme-icon');
 

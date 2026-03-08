@@ -1,16 +1,18 @@
 ---
-title: "欢迎来到 Starblog"
-slug: "welcome-to-starblog"
-excerpt: "这是第一篇示例文章，用于验证 Keystatic 到 Astro 的完整发布链路。"
-cover: "/uploads/demo-cover.svg"
-category: "公告"
-tags: ["Astro", "Keystatic", "Cloudflare"]
-status: "published"
-publishedAt: "2026-03-08T10:30:00+08:00"
-updatedAt: "2026-03-08T10:30:00+08:00"
-seoTitle: "欢迎来到 Starblog：零成本可视化博客"
-seoDescription: "使用 Astro + Keystatic + Cloudflare Pages 实现类 Word 编辑与自动化发布。"
-canonical: "https://example.com/posts/welcome-to-starblog"
+title:
+  name: "欢迎来到 Starblog"
+  slug: "welcome-to-starblog"
+advanced:
+  discriminant: true
+  value:
+    excerpt: "这是第一篇示例文章，用于验证 Keystatic 到 Astro 的完整发布链路。"
+    cover: "/uploads/demo-cover.svg"
+    category: "公告"
+    tags: ["Astro", "Keystatic", "Cloudflare"]
+    status: "published"
+    seoTitle: "欢迎来到 Starblog：零成本可视化博客"
+    seoDescription: "使用 Astro + Keystatic + Cloudflare Pages 实现类 Word 编辑与自动化发布。"
+    canonical: "https://example.com/posts/welcome-to-starblog"
 ---
 
 欢迎使用 Starblog。
