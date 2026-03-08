@@ -1,16 +1,18 @@
 import type { APIRoute } from 'astro';
 import { findUserByUsername, verifyPassword } from '../../../lib/auth/store';
 import { createSessionToken, sessionCookie } from '../../../lib/auth/session';
+import { requireDb } from '../../../lib/db';
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
+    const db = requireDb(locals);
     const body = await request.json();
     const account = String(body.account || '').trim().toLowerCase();
     const password = String(body.password || '');
 
-    const user = await findUserByUsername(account);
+    const user = await findUserByUsername(db, account);
     if (!user || !verifyPassword(password, user.passwordHash)) {
       return new Response(JSON.stringify({ message: '用户名或密码错误。' }), {
         status: 401,

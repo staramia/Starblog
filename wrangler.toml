@@ -1,0 +1,11 @@
+name = "starblog"
+compatibility_date = "2026-03-08"
+
+[[kv_namespaces]]
+binding = "SESSION"
+id = "replace-with-your-kv-namespace-id"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "starblog-db"
+database_id = "replace-with-your-d1-database-id"

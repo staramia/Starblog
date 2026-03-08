@@ -75,6 +75,6 @@ export function clearSessionCookie() {
 }
 
 export function requireRole(role: UserRole, current: UserRole) {
-  const rank: Record<UserRole, number> = { author: 1, editor: 2, admin: 3 };
+  const rank: Record<UserRole, number> = { author: 1, bot: 1, admin: 3 };
   return rank[current] >= rank[role];
 }

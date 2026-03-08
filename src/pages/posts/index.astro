@@ -1,15 +1,17 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getPostAuthorName, getPostDates, getPostSlug, getPublishedPostsByCategory } from '../../lib/posts';
+import { requireDb } from '../../lib/db';
 
-const posts = await getPublishedPostsByCategory('article');
+const db = requireDb(Astro.locals);
+const posts = await getPublishedPostsByCategory(db, 'article');
 
 const metaMap = new Map<string, { author: string; published: string }>();
 for (const post of posts) {
   const slug = getPostSlug(post);
   const { publishedAt } = await getPostDates(post);
   metaMap.set(slug, {
-    author: await getPostAuthorName(post),
+    author: await getPostAuthorName(db, post),
     published: publishedAt.toLocaleString('zh-CN', { hour12: false }),
   });
 }

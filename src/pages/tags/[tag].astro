@@ -1,19 +1,14 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getPostDates, getPostSlug, getPublishedPosts, groupByTag } from '../../lib/posts';
+import { requireDb } from '../../lib/db';
 
-export const prerender = true;
+export const prerender = false;
 
-export async function getStaticPaths() {
-  const posts = await getPublishedPosts();
-  const grouped = groupByTag(posts);
-  return Object.entries(grouped).map(([tag, entries]) => ({
-    params: { tag },
-    props: { tag, entries },
-  }));
-}
-
-const { tag, entries } = Astro.props;
+const db = requireDb(Astro.locals);
+const tag = String(Astro.params.tag || '');
+const grouped = groupByTag(await getPublishedPosts(db));
+const entries = grouped[tag] || [];
 
 function displayDate(post: { data: { publishedAt?: Date } }) {
   return (post.data.publishedAt || new Date()).toLocaleString('zh-CN', { hour12: false });

@@ -1,11 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getPostAuthorName, getPostDates, getPostSlug, getPublishedPosts } from '../lib/posts';
+import { requireDb } from '../lib/db';
 
-const posts = await getPublishedPosts();
+const db = requireDb(Astro.locals);
+const posts = await getPublishedPosts(db);
 const latest = posts.slice(0, 6);
 const totalPosts = posts.length;
-const authors = new Set(await Promise.all(posts.map((post) => getPostAuthorName(post)))).size;
+const authors = new Set(await Promise.all(posts.map((post) => getPostAuthorName(db, post)))).size;
 const tags = new Set(
   posts.flatMap((post) => (post.data.advanced?.discriminant ? post.data.advanced.value?.tags || [] : []))
 ).size;
@@ -20,7 +22,7 @@ for (const post of latest) {
   const slug = getPostSlug(post);
   const { publishedAt } = await getPostDates(post);
   publishedDateMap.set(slug, publishedAt.toLocaleString('zh-CN', { hour12: false }));
-  authorMap.set(slug, await getPostAuthorName(post));
+  authorMap.set(slug, await getPostAuthorName(db, post));
 }
 
 function titleOf(post: { data: { title: string | { name: string } } }) {
