@@ -1,6 +1,7 @@
 name = "starblog"
 compatibility_date = "2026-03-08"
 pages_build_output_dir = "dist"
+compatibility_flags = ["nodejs_compat"]
 
 [[kv_namespaces]]
 binding = "SESSION"
