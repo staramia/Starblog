@@ -1,8 +1,10 @@
 import { findUserById } from './store';
 import { getSessionFromRequest } from './session';
+import { requireDb } from '../db';
 
-export async function getCurrentUser(req: Request) {
+export async function getCurrentUser(req: Request, locals: unknown) {
   const session = getSessionFromRequest(req);
   if (!session) return null;
-  return findUserById(session.sub);
+  const db = requireDb(locals);
+  return findUserById(db, session.sub);
 }

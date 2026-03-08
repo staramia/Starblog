@@ -1,7 +1,4 @@
-import fs from 'node:fs/promises';
-import path from 'node:path';
-
-const postsDir = path.join(process.cwd(), 'src/content/posts');
+import type { D1Like } from '../db';
 
 export interface ManagedPost {
   slug: string;
@@ -16,44 +13,42 @@ export interface ManagedPost {
   content: string;
 }
 
-function stripQuotes(value: string) {
-  const trimmed = value.trim();
-  if ((trimmed.startsWith('"') && trimmed.endsWith('"')) || (trimmed.startsWith("'") && trimmed.endsWith("'"))) {
-    return trimmed.slice(1, -1);
+type PostRow = {
+  slug: string;
+  author_id: string;
+  post_category: 'article' | 'report';
+  title: string;
+  excerpt: string | null;
+  tags_json: string | null;
+  status: 'draft' | 'published';
+  published_at: string | null;
+  updated_at: string;
+  content: string | null;
+};
+
+function parseTags(tagsJson: string | null): string[] {
+  if (!tagsJson) return [];
+  try {
+    const value = JSON.parse(tagsJson) as unknown;
+    if (!Array.isArray(value)) return [];
+    return value.map((item) => String(item)).filter(Boolean);
+  } catch {
+    return [];
   }
-  return trimmed;
 }
 
-function extractLine(frontmatter: string, pattern: RegExp) {
-  const match = frontmatter.match(pattern);
-  return match ? stripQuotes(match[1]) : '';
-}
-
-function parsePostFile(content: string, slug: string): ManagedPost {
-  const match = content.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
-  const frontmatter = match?.[1] ?? '';
-  const body = match?.[2] ?? '';
-
-  const tagsRaw = extractLine(frontmatter, /^\s{4}tags:\s*\[(.*)\]$/m);
-  const tags = tagsRaw
-    ? tagsRaw
-        .split(',')
-        .map((tag) => stripQuotes(tag))
-        .map((tag) => tag.trim())
-        .filter(Boolean)
-    : [];
-
+function mapPost(row: PostRow): ManagedPost {
   return {
-    slug,
-    authorId: extractLine(frontmatter, /^authorId:\s*(.*)$/m),
-    postCategory: (extractLine(frontmatter, /^postCategory:\s*(.*)$/m) as 'article' | 'report') || 'article',
-    title: extractLine(frontmatter, /^title:\s*(.*)$/m) || slug,
-    excerpt: extractLine(frontmatter, /^\s{4}excerpt:\s*(.*)$/m),
-    tags,
-    status: (extractLine(frontmatter, /^\s{4}status:\s*(.*)$/m) as 'draft' | 'published') || 'draft',
-    publishedAt: extractLine(frontmatter, /^publishedAt:\s*(.*)$/m) || undefined,
-    updatedAt: extractLine(frontmatter, /^updatedAt:\s*(.*)$/m) || undefined,
-    content: body,
+    slug: row.slug,
+    authorId: row.author_id,
+    postCategory: row.post_category,
+    title: row.title,
+    excerpt: row.excerpt || '',
+    tags: parseTags(row.tags_json),
+    status: row.status,
+    publishedAt: row.published_at || undefined,
+    updatedAt: row.updated_at,
+    content: row.content || '',
   };
 }
 
@@ -66,72 +61,36 @@ function slugify(value: string) {
     .replace(/-+/g, '-');
 }
 
-function toFrontmatter(post: ManagedPost) {
-  const tags = post.tags.map((tag) => `"${tag.replace(/"/g, '')}"`).join(', ');
-  const lines = [
-    '---',
-    `authorId: "${post.authorId}"`,
-    `postCategory: "${post.postCategory}"`,
-    `title: "${post.title.replace(/"/g, '\\"')}"`,
-    post.publishedAt ? `publishedAt: "${post.publishedAt}"` : '',
-    `updatedAt: "${post.updatedAt || new Date().toISOString()}"`,
-    'advanced:',
-    '  discriminant: true',
-    '  value:',
-    `    excerpt: "${(post.excerpt || '').replace(/"/g, '\\"')}"`,
-    `    tags: [${tags}]`,
-    `    status: "${post.status}"`,
-    '---',
-    '',
-    post.content || '',
-    '',
-  ].filter((line) => line !== '');
-  return lines.join('\n');
+export async function listManagedPosts(db: D1Like, authorId?: string) {
+  const baseQuery =
+    'SELECT slug, author_id, post_category, title, excerpt, tags_json, status, published_at, updated_at, content FROM posts';
+
+  const { results } = authorId
+    ? await db
+        .prepare(`${baseQuery} WHERE author_id = ? ORDER BY datetime(updated_at) DESC`)
+        .bind(authorId)
+        .all<PostRow>()
+    : await db.prepare(`${baseQuery} ORDER BY datetime(updated_at) DESC`).bind().all<PostRow>();
+
+  return results.map(mapPost);
 }
 
-function postFilePath(slug: string) {
-  return path.join(postsDir, `${slug}.mdoc`);
+export async function getManagedPost(db: D1Like, slug: string) {
+  const row = await db
+    .prepare(
+      'SELECT slug, author_id, post_category, title, excerpt, tags_json, status, published_at, updated_at, content FROM posts WHERE slug = ? LIMIT 1'
+    )
+    .bind(slug)
+    .first<PostRow>();
+  if (!row) throw new Error('NOT_FOUND');
+  return mapPost(row);
 }
 
-export async function listManagedPosts(authorId?: string) {
-  await fs.mkdir(postsDir, { recursive: true });
-  const entries = await fs.readdir(postsDir);
-  const files = entries.filter((name) => name.endsWith('.mdoc') || name.endsWith('.md'));
-  const posts = await Promise.all(
-    files.map(async (file) => {
-      const slug = file.replace(/\.(md|mdoc)$/i, '');
-      const absolutePath = path.join(postsDir, file);
-      const raw = await fs.readFile(absolutePath, 'utf-8');
-      const post = parsePostFile(raw, slug);
-      const stat = await fs.stat(absolutePath);
-      return {
-        ...post,
-        updatedAt: post.updatedAt || stat.mtime.toISOString(),
-      };
-    })
-  );
-
-  posts.sort((a, b) => new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime());
-  if (!authorId) return posts;
-  return posts.filter((post) => post.authorId && post.authorId === authorId);
-}
-
-export async function getManagedPost(slug: string) {
-  const filePath = postFilePath(slug);
-  const raw = await fs.readFile(filePath, 'utf-8');
-  return parsePostFile(raw, slug);
-}
-
-export async function createManagedPost(input: Partial<ManagedPost>) {
+export async function createManagedPost(db: D1Like, input: Partial<ManagedPost>) {
   const slug = slugify(input.slug || input.title || `post-${Date.now()}`);
-  const filePath = postFilePath(slug);
 
-  try {
-    await fs.access(filePath);
-    throw new Error('SLUG_EXISTS');
-  } catch {
-    // proceed when file does not exist
-  }
+  const exists = await db.prepare('SELECT slug FROM posts WHERE slug = ? LIMIT 1').bind(slug).first<{ slug: string }>();
+  if (exists) throw new Error('SLUG_EXISTS');
 
   const now = new Date().toISOString();
   const status: 'draft' | 'published' = input.status === 'published' ? 'published' : 'draft';
@@ -148,12 +107,28 @@ export async function createManagedPost(input: Partial<ManagedPost>) {
     content: input.content || '',
   };
 
-  await fs.writeFile(filePath, toFrontmatter(post), 'utf-8');
+  await db
+    .prepare(
+      'INSERT INTO posts (slug, author_id, post_category, title, excerpt, tags_json, status, published_at, updated_at, content) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    )
+    .bind(
+      post.slug,
+      post.authorId,
+      post.postCategory,
+      post.title,
+      post.excerpt,
+      JSON.stringify(post.tags),
+      post.status,
+      post.publishedAt || null,
+      post.updatedAt,
+      post.content
+    )
+    .run();
   return post;
 }
 
-export async function updateManagedPost(slug: string, input: Partial<ManagedPost>) {
-  const current = await getManagedPost(slug);
+export async function updateManagedPost(db: D1Like, slug: string, input: Partial<ManagedPost>) {
+  const current = await getManagedPost(db, slug);
   const now = new Date().toISOString();
   const status: 'draft' | 'published' = input.status === 'published' ? 'published' : 'draft';
 
@@ -169,10 +144,25 @@ export async function updateManagedPost(slug: string, input: Partial<ManagedPost
     tags: input.tags || current.tags,
   };
 
-  await fs.writeFile(postFilePath(slug), toFrontmatter(merged), 'utf-8');
+  await db
+    .prepare(
+      'UPDATE posts SET title = ?, excerpt = ?, tags_json = ?, status = ?, published_at = ?, updated_at = ?, content = ? WHERE slug = ?'
+    )
+    .bind(
+      merged.title,
+      merged.excerpt,
+      JSON.stringify(merged.tags),
+      merged.status,
+      merged.publishedAt || null,
+      merged.updatedAt,
+      merged.content,
+      slug
+    )
+    .run();
+
   return merged;
 }
 
-export async function deleteManagedPost(slug: string) {
-  await fs.rm(postFilePath(slug), { force: true });
+export async function deleteManagedPost(db: D1Like, slug: string) {
+  await db.prepare('DELETE FROM posts WHERE slug = ?').bind(slug).run();
 }

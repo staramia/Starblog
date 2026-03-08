@@ -7,7 +7,7 @@ import remarkGfm from 'remark-gfm';
 
 export default defineConfig({
   site: process.env.PUBLIC_SITE_URL || 'https://example.com',
-  output: 'static',
+  output: 'server',
   devToolbar: {
     enabled: false,
   },

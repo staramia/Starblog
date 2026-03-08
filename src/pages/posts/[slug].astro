@@ -1,35 +1,43 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getPostAuthorName, getPostDates, getPostSlug, getPublishedPosts } from '../../lib/posts';
-import { render } from 'astro:content';
+import { getPostAuthorName, getPostDates, getPublishedPostBySlug } from '../../lib/posts';
+import { requireDb } from '../../lib/db';
+import { marked } from 'marked';
 
-export const prerender = true;
+export const prerender = false;
 
-export async function getStaticPaths() {
-  const posts = await getPublishedPosts();
-  return posts.map((post) => ({
-    params: { slug: getPostSlug(post) },
-    props: { post },
-  }));
+const db = requireDb(Astro.locals);
+const slug = String(Astro.params.slug || '');
+const post = await getPublishedPostBySlug(db, slug);
+if (!post) {
+  Astro.response.status = 404;
 }
-
-const { post } = Astro.props;
-const { Content } = await render(post);
-const title = typeof post.data.title === 'string' ? post.data.title : post.data.title.name;
+const title = post ? (typeof post.data.title === 'string' ? post.data.title : post.data.title.name) : '文章不存在';
 const pageTitle =
-  (post.data.advanced?.discriminant ? post.data.advanced.value?.seoTitle : undefined) || title;
+  (post?.data.advanced?.discriminant ? post.data.advanced.value?.seoTitle : undefined) || title;
 const pageDescription =
-  (post.data.advanced?.discriminant ? post.data.advanced.value?.seoDescription : undefined) || title;
-const canonical = post.data.advanced?.discriminant ? post.data.advanced.value?.canonical : undefined;
-const { publishedAt, updatedAt } = await getPostDates(post);
+  (post?.data.advanced?.discriminant ? post.data.advanced.value?.seoDescription : undefined) || title;
+const canonical = post?.data.advanced?.discriminant ? post.data.advanced.value?.canonical : undefined;
+const { publishedAt, updatedAt } = await getPostDates(
+  post || {
+    data: {
+      publishedAt: new Date(),
+      updatedAt: new Date(),
+    },
+  }
+);
 const publishedDate = publishedAt.toLocaleString('zh-CN', { hour12: false });
 const updatedDate = updatedAt.toLocaleString('zh-CN', { hour12: false });
-const authorName = await getPostAuthorName(post);
-const tags = post.data.advanced?.discriminant ? post.data.advanced.value?.tags || [] : [];
+const authorName = post ? await getPostAuthorName(db, post) : '系统';
+const tags = post?.data.advanced?.discriminant ? post.data.advanced.value?.tags || [] : [];
+const html = post ? await marked.parse(post.body) : '';
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription} canonical={canonical}>
   <article class="article">
+    {!post && <p class="post-meta">文章不存在或未发布。</p>}
+    {post && (
+      <>
     <header class="article-header">
       <h1>{title}</h1>
       <p class="post-meta">
@@ -42,6 +50,10 @@ const tags = post.data.advanced?.discriminant ? post.data.advanced.value?.tags |
       </div>
     </header>
     <hr />
-    <Content />
+    <div class="post-content">
+      <div set:html={html}></div>
+    </div>
+      </>
+    )}
   </article>
 </BaseLayout>

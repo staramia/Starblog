@@ -1,11 +1,13 @@
 import type { APIRoute } from 'astro';
 import { createUser, findUserByUsername } from '../../../lib/auth/store';
 import { createSessionToken, sessionCookie } from '../../../lib/auth/session';
+import { requireDb } from '../../../lib/db';
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
+    const db = requireDb(locals);
     const body = await request.json();
     const nickname = String(body.nickname || '').trim();
     const account = String(body.account || '').trim().toLowerCase();
@@ -25,7 +27,7 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    const existed = await findUserByUsername(account);
+    const existed = await findUserByUsername(db, account);
     if (existed) {
       return new Response(JSON.stringify({ message: '该账号已被占用。' }), {
         status: 409,
@@ -33,7 +35,7 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    const user = await createUser({ username: account, nickname, password, role: 'author' });
+    const user = await createUser(db, { username: account, nickname, password, role: 'author' });
     const token = createSessionToken({ sub: user.id, username: user.username, role: user.role });
 
     return new Response(JSON.stringify({ ok: true, user: { id: user.id, username: user.username, role: user.role } }), {

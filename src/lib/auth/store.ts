@@ -1,40 +1,25 @@
-import fs from 'node:fs/promises';
-import path from 'node:path';
 import { randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
+import type { D1Like } from '../db';
 import type { AuthUser, UserRole } from './types';
 
-const dataDir = path.join(process.cwd(), '.data');
-const usersFile = path.join(dataDir, 'users.json');
+type UserRow = {
+  id: string;
+  username: string;
+  nickname: string;
+  role: UserRole;
+  password_hash: string;
+  created_at: string;
+};
 
-async function ensureStore() {
-  await fs.mkdir(dataDir, { recursive: true });
-  try {
-    await fs.access(usersFile);
-  } catch {
-    await fs.writeFile(usersFile, '[]', 'utf-8');
-  }
-}
-
-async function readUsers(): Promise<AuthUser[]> {
-  await ensureStore();
-  const raw = await fs.readFile(usersFile, 'utf-8');
-  const parsed = JSON.parse(raw) as Array<Partial<AuthUser> & { email?: string }>;
-  return parsed.map((user) => {
-    const fallbackName = user.email ? user.email.split('@')[0] : 'user';
-    const username = (user.username || fallbackName || '').toLowerCase();
-    return {
-      id: String(user.id || randomBytes(8).toString('hex')),
-      username,
-      nickname: String(user.nickname || username || '创作者'),
-      role: (user.role as UserRole) || 'author',
-      passwordHash: String(user.passwordHash || ''),
-      createdAt: String(user.createdAt || new Date().toISOString()),
-    };
-  });
-}
-
-async function writeUsers(users: AuthUser[]) {
-  await fs.writeFile(usersFile, JSON.stringify(users, null, 2), 'utf-8');
+function mapUser(row: UserRow): AuthUser {
+  return {
+    id: row.id,
+    username: row.username,
+    nickname: row.nickname,
+    role: row.role,
+    passwordHash: row.password_hash,
+    createdAt: row.created_at,
+  };
 }
 
 export function hashPassword(password: string) {
@@ -52,61 +37,70 @@ export function verifyPassword(password: string, stored: string) {
   return timingSafeEqual(candidate, original);
 }
 
-export async function findUserByUsername(username: string) {
-  const users = await readUsers();
-  return users.find((user) => user.username.toLowerCase() === username.toLowerCase());
+export async function findUserByUsername(db: D1Like, username: string) {
+  const normalized = username.trim().toLowerCase();
+  const row = await db
+    .prepare('SELECT id, username, nickname, role, password_hash, created_at FROM users WHERE username = ? LIMIT 1')
+    .bind(normalized)
+    .first<UserRow>();
+  return row ? mapUser(row) : undefined;
 }
 
-export async function findUserById(id: string) {
-  const users = await readUsers();
-  return users.find((user) => user.id === id);
+export async function findUserById(db: D1Like, id: string) {
+  const row = await db
+    .prepare('SELECT id, username, nickname, role, password_hash, created_at FROM users WHERE id = ? LIMIT 1')
+    .bind(id)
+    .first<UserRow>();
+  return row ? mapUser(row) : undefined;
 }
 
-export async function getUserDisplayNameById(id: string) {
-  const user = await findUserById(id);
+export async function getUserDisplayNameById(db: D1Like, id: string) {
+  const user = await findUserById(db, id);
   if (!user) return '系统';
   return user.nickname || user.username || '系统';
 }
 
-export async function listUsers() {
-  return readUsers();
+export async function listUsers(db: D1Like) {
+  const { results } = await db
+    .prepare('SELECT id, username, nickname, role, password_hash, created_at FROM users ORDER BY datetime(created_at) DESC')
+    .bind()
+    .all<UserRow>();
+  return results.map(mapUser);
 }
 
-export async function deleteUserById(id: string) {
-  const users = await readUsers();
-  const next = users.filter((user) => user.id !== id);
-  await writeUsers(next);
+export async function deleteUserById(db: D1Like, id: string) {
+  await db.prepare('DELETE FROM users WHERE id = ?').bind(id).run();
 }
 
-export async function updateUserRoleById(id: string, role: UserRole) {
-  const users = await readUsers();
-  const next = users.map((user) => {
-    if (user.id !== id) return user;
-    return { ...user, role };
-  });
-  await writeUsers(next);
+export async function updateUserRoleById(db: D1Like, id: string, role: UserRole) {
+  await db.prepare('UPDATE users SET role = ? WHERE id = ?').bind(role, id).run();
 }
 
-export async function createUser(params: {
-  username: string;
-  nickname: string;
-  password: string;
-  role?: UserRole;
-}) {
-  const users = await readUsers();
-  const exists = users.some((user) => user.username.toLowerCase() === params.username.toLowerCase());
+export async function createUser(
+  db: D1Like,
+  params: {
+    username: string;
+    nickname: string;
+    password: string;
+    role?: UserRole;
+  }
+) {
+  const normalized = params.username.trim().toLowerCase();
+  const exists = await findUserByUsername(db, normalized);
   if (exists) throw new Error('EMAIL_EXISTS');
 
   const user: AuthUser = {
     id: randomBytes(12).toString('hex'),
-    username: params.username.trim().toLowerCase(),
-    nickname: params.nickname.trim() || params.username.trim().toLowerCase(),
+    username: normalized,
+    nickname: params.nickname.trim() || normalized,
     role: params.role || 'author',
     passwordHash: hashPassword(params.password),
     createdAt: new Date().toISOString(),
   };
 
-  users.push(user);
-  await writeUsers(users);
+  await db
+    .prepare('INSERT INTO users (id, username, nickname, role, password_hash, created_at) VALUES (?, ?, ?, ?, ?, ?)')
+    .bind(user.id, user.username, user.nickname, user.role, user.passwordHash, user.createdAt)
+    .run();
   return user;
 }

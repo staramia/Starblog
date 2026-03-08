@@ -3,8 +3,8 @@ import { getCurrentUser } from '../../../lib/auth/guard';
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ request }) => {
-  const user = await getCurrentUser(request);
+export const GET: APIRoute = async ({ request, locals }) => {
+  const user = await getCurrentUser(request, locals);
   if (!user) {
     return new Response(JSON.stringify({ authenticated: false }), {
       status: 200,

@@ -1,37 +1,89 @@
-import { getCollection } from 'astro:content';
-import fs from 'node:fs/promises';
-import path from 'node:path';
+import type { D1Like } from './db';
+import { getUserDisplayNameById } from './auth/store';
 
-export function getPostSlug(post: {
-  slug?: string;
-  id?: string;
-  data: { title: string | { slug?: string } };
-}) {
+export interface PublicPost {
+  slug: string;
+  body: string;
+  data: {
+    authorId: string;
+    postCategory: 'article' | 'report';
+    title: string | { name: string; slug: string };
+    advanced?: {
+      discriminant?: boolean;
+      value?: {
+        excerpt?: string;
+        tags?: string[];
+        status?: 'draft' | 'published';
+        seoTitle?: string;
+        seoDescription?: string;
+        canonical?: string;
+      };
+    };
+    publishedAt?: Date;
+    updatedAt?: Date;
+  };
+}
+
+type PostRow = {
+  slug: string;
+  author_id: string;
+  post_category: 'article' | 'report';
+  title: string;
+  excerpt: string | null;
+  tags_json: string | null;
+  status: 'draft' | 'published';
+  published_at: string | null;
+  updated_at: string;
+  content: string | null;
+};
+
+function parseTags(tagsJson: string | null): string[] {
+  if (!tagsJson) return [];
+  try {
+    const value = JSON.parse(tagsJson) as unknown;
+    if (!Array.isArray(value)) return [];
+    return value.map((item) => String(item)).filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
+function mapPublicPost(row: PostRow): PublicPost {
+  const tags = parseTags(row.tags_json);
+  const publishedAt = row.published_at ? new Date(row.published_at) : undefined;
+  const updatedAt = row.updated_at ? new Date(row.updated_at) : publishedAt;
+  return {
+    slug: row.slug,
+    body: row.content || '',
+    data: {
+      authorId: row.author_id,
+      postCategory: row.post_category,
+      title: row.title,
+      advanced: {
+        discriminant: true,
+        value: {
+          excerpt: row.excerpt || '',
+          tags,
+          status: row.status,
+        },
+      },
+      publishedAt,
+      updatedAt,
+    },
+  };
+}
+
+export function getPostSlug(post: { slug?: string; data: { title: string | { slug?: string } } }) {
   if (typeof post.data.title !== 'string' && post.data.title.slug) {
     return post.data.title.slug;
   }
-  if (post.slug) return post.slug;
-  const id = post.id || '';
-  const filename = id.split('/').pop() || id;
-  return filename.replace(/\.(md|mdoc)$/i, '');
+  return post.slug || '';
 }
 
-async function getUserMap() {
-  try {
-    const file = path.join(process.cwd(), '.data', 'users.json');
-    const raw = await fs.readFile(file, 'utf-8');
-    const users = JSON.parse(raw) as Array<{ id: string; nickname?: string; username?: string }>;
-    return new Map(users.map((user) => [user.id, user.nickname || user.username || '系统']));
-  } catch {
-    return new Map<string, string>();
-  }
-}
-
-export async function getPostAuthorName(post: { data: { authorId?: string } }) {
+export async function getPostAuthorName(db: D1Like, post: { data: { authorId?: string } }) {
   const authorId = post.data.authorId;
   if (!authorId) return '系统';
-  const map = await getUserMap();
-  return map.get(authorId) || '系统';
+  return getUserDisplayNameById(db, authorId);
 }
 
 function readAdvanced(post: {
@@ -40,7 +92,6 @@ function readAdvanced(post: {
       discriminant?: boolean;
       value?: {
         tags?: string[];
-        status?: 'draft' | 'published';
       };
     };
   };
@@ -49,69 +100,38 @@ function readAdvanced(post: {
   return post.data.advanced.value;
 }
 
-function getPublishedDate(post: { data: { publishedAt?: Date }; filePath?: string; id?: string }) {
-  if (post.data.publishedAt) return post.data.publishedAt;
-  return undefined;
-}
-
-async function getPostStat(post: { filePath?: string; id?: string }) {
-  const candidates: string[] = [];
-  if (post.filePath) candidates.push(post.filePath);
-  if (post.id) candidates.push(path.join(process.cwd(), 'src/content/posts', post.id));
-
-  for (const filePath of candidates) {
-    try {
-      const absolutePath = path.isAbsolute(filePath) ? filePath : path.resolve(filePath);
-      return await fs.stat(absolutePath);
-    } catch {
-      continue;
-    }
-  }
-
-  return undefined;
-}
-
-async function getPublishedTimestamp(post: { data: { publishedAt?: Date }; filePath?: string; id?: string }) {
-  const directDate = getPublishedDate(post);
-  if (directDate) return directDate.getTime();
-  const stat = await getPostStat(post);
-  if (stat) return stat.birthtimeMs || stat.mtimeMs;
-  return 0;
-}
-
 export async function getPostDates(post: {
   data: { publishedAt?: Date; updatedAt?: Date };
-  filePath?: string;
-  id?: string;
 }) {
-  const stat = await getPostStat(post);
-  const publishedAt = post.data.publishedAt || (stat ? new Date(stat.birthtimeMs || stat.mtimeMs) : new Date());
-  const updatedAt = post.data.updatedAt || (stat ? new Date(stat.mtimeMs) : publishedAt);
+  const publishedAt = post.data.publishedAt || new Date();
+  const updatedAt = post.data.updatedAt || publishedAt;
   return { publishedAt, updatedAt };
 }
 
-export async function getPublishedPosts() {
-  const now = new Date();
-  const posts = await getCollection('posts', ({ data }) => {
-    const status = data.advanced?.discriminant ? data.advanced.value?.status : 'published';
-    if (status === 'draft') return false;
-    if (!data.publishedAt) return true;
-    return data.publishedAt <= now;
-  });
-
-  const postsWithTimestamp = await Promise.all(
-    posts.map(async (post) => ({
-      post,
-      timestamp: await getPublishedTimestamp(post),
-    }))
-  );
-
-  postsWithTimestamp.sort((a, b) => b.timestamp - a.timestamp);
-  return postsWithTimestamp.map((item) => item.post);
+export async function getPublishedPosts(db: D1Like) {
+  const now = new Date().toISOString();
+  const { results } = await db
+    .prepare(
+      'SELECT slug, author_id, post_category, title, excerpt, tags_json, status, published_at, updated_at, content FROM posts WHERE status = ? AND (published_at IS NULL OR published_at <= ?) ORDER BY datetime(COALESCE(published_at, updated_at)) DESC'
+    )
+    .bind('published', now)
+    .all<PostRow>();
+  return results.map(mapPublicPost);
 }
 
-export async function getPublishedPostsByCategory(category: 'article' | 'report') {
-  const posts = await getPublishedPosts();
+export async function getPublishedPostBySlug(db: D1Like, slug: string) {
+  const now = new Date().toISOString();
+  const row = await db
+    .prepare(
+      'SELECT slug, author_id, post_category, title, excerpt, tags_json, status, published_at, updated_at, content FROM posts WHERE slug = ? AND status = ? AND (published_at IS NULL OR published_at <= ?) LIMIT 1'
+    )
+    .bind(slug, 'published', now)
+    .first<PostRow>();
+  return row ? mapPublicPost(row) : null;
+}
+
+export async function getPublishedPostsByCategory(db: D1Like, category: 'article' | 'report') {
+  const posts = await getPublishedPosts(db);
   return posts.filter((post) => (post.data.postCategory || 'article') === category);
 }
 
