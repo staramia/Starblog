@@ -1,0 +1,12 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![fileScanIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNMjAgMTBWN2wtNS01SDZhMiAyIDAgMCAwLTIgMnYxNmEyIDIgMCAwIDAgMiAyaDQiLz48cGF0aCBkPSJNMTQgMnY0YTIgMiAwIDAgMCAyIDJoNE0xNiAxNGEyIDIgMCAwIDAtMiAyTTIwIDE0YTIgMiAwIDAgMSAyIDJNMjAgMjJhMiAyIDAgMCAwIDItMk0xNiAyMmEyIDIgMCAwIDEtMi0yIi8+PC9zdmc+) */
+const fileScanIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "M20 10V7l-5-5H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4"
+  }), /*#__PURE__*/jsx("path", {
+    d: "M14 2v4a2 2 0 0 0 2 2h4M16 14a2 2 0 0 0-2 2M20 14a2 2 0 0 1 2 2M20 22a2 2 0 0 0 2-2M16 22a2 2 0 0 1-2-2"
+  })]
+});
+
+export { fileScanIcon };

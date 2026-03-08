@@ -1,0 +1,12 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![pointerIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNMjIgMTRhOCA4IDAgMCAxLTggOE0xOCAxMXYtMWEyIDIgMCAwIDAtMi0ydjBhMiAyIDAgMCAwLTIgMnYwTTE0IDEwVjlhMiAyIDAgMCAwLTItMnYwYTIgMiAwIDAgMC0yIDJ2MU0xMCA5LjVWNGEyIDIgMCAwIDAtMi0ydjBhMiAyIDAgMCAwLTIgMnYxMCIvPjxwYXRoIGQ9Ik0xOCAxMWEyIDIgMCAxIDEgNCAwdjNhOCA4IDAgMCAxLTggOGgtMmMtMi44IDAtNC41LS44Ni01Ljk5LTIuMzRsLTMuNi0zLjZhMiAyIDAgMCAxIDIuODMtMi44Mkw3IDE1Ii8+PC9zdmc+) */
+const pointerIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "M22 14a8 8 0 0 1-8 8M18 11v-1a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0M14 10V9a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v1M10 9.5V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v10"
+  }), /*#__PURE__*/jsx("path", {
+    d: "M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"
+  })]
+});
+
+export { pointerIcon };

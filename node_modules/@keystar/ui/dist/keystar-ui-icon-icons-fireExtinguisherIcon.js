@@ -1,0 +1,12 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![fireExtinguisherIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNMTUgNi41VjNhMSAxIDAgMCAwLTEtMWgtMmExIDEgMCAwIDAtMSAxdjMuNU05IDE4aDhNMTggM2gtMyIvPjxwYXRoIGQ9Ik0xMSAzYTYgNiAwIDAgMC02IDZ2MTFNNSAxM2g0TTE3IDEwYTQgNCAwIDAgMC04IDB2MTBhMiAyIDAgMCAwIDIgMmg0YTIgMiAwIDAgMCAyLTJaIi8+PC9zdmc+) */
+const fireExtinguisherIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "M15 6.5V3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3.5M9 18h8M18 3h-3"
+  }), /*#__PURE__*/jsx("path", {
+    d: "M11 3a6 6 0 0 0-6 6v11M5 13h4M17 10a4 4 0 0 0-8 0v10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2Z"
+  })]
+});
+
+export { fireExtinguisherIcon };

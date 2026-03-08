@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublishedPosts } from '../../lib/posts';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const pageTitle = post.data.seoTitle || post.data.title;
+const pageDescription = post.data.seoDescription || post.data.excerpt || post.data.title;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} canonical={post.data.canonical}>
+  <article class="article">
+    <h1>{post.data.title}</h1>
+    <p class="post-meta">
+      {post.data.publishedAt?.toLocaleDateString('zh-CN')} · {post.data.category}
+    </p>
+    <div class="chips">
+      {post.data.tags.map((tag: string) => (
+        <a class="chip" href={`/tags/${encodeURIComponent(tag)}`}>#{tag}</a>
+      ))}
+    </div>
+    <hr />
+    <Content />
+  </article>
+</BaseLayout>

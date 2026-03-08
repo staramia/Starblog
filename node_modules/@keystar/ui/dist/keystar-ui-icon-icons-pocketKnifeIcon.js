@@ -1,0 +1,12 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![pocketKnifeIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNMyAydjFjMCAxIDIgMSAyIDJTMyA2IDMgN3MyIDEgMiAyLTIgMS0yIDIgMiAxIDIgMk0xOCA2aC4wMU02IDE4aC4wMU0yMC44MyA4LjgzYTQgNCAwIDAgMC01LjY2LTUuNjZsLTEyIDEyYTQgNCAwIDEgMCA1LjY2IDUuNjZaIi8+PHBhdGggZD0iTTE4IDExLjY2VjIyYTQgNCAwIDAgMCA0LTRWNiIvPjwvc3ZnPg==) */
+const pocketKnifeIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "M3 2v1c0 1 2 1 2 2S3 6 3 7s2 1 2 2-2 1-2 2 2 1 2 2M18 6h.01M6 18h.01M20.83 8.83a4 4 0 0 0-5.66-5.66l-12 12a4 4 0 1 0 5.66 5.66Z"
+  }), /*#__PURE__*/jsx("path", {
+    d: "M18 11.66V22a4 4 0 0 0 4-4V6"
+  })]
+});
+
+export { pocketKnifeIcon };

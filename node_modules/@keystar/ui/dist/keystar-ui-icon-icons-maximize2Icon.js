@@ -1,0 +1,8 @@
+import { jsx } from 'react/jsx-runtime';
+
+/** ![maximize2Icon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNMTUgM2g2djZNOSAyMUgzdi02TTIxIDNsLTcgN00zIDIxbDctNyIvPjwvc3ZnPg==) */
+const maximize2Icon = /*#__PURE__*/jsx("path", {
+  d: "M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"
+});
+
+export { maximize2Icon };

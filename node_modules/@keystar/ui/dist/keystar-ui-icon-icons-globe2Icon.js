@@ -1,0 +1,14 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![globe2Icon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNMjEuNTQgMTVIMTdhMiAyIDAgMCAwLTIgMnY0LjU0TTcgMy4zNFY1YTMgMyAwIDAgMCAzIDN2MGEyIDIgMCAwIDEgMiAydjBjMCAxLjEuOSAyIDIgMnYwYTIgMiAwIDAgMCAyLTJ2MGMwLTEuMS45LTIgMi0yaDMuMTdNMTEgMjEuOTVWMThhMiAyIDAgMCAwLTItMnYwYTIgMiAwIDAgMS0yLTJ2LTFhMiAyIDAgMCAwLTItMkgyLjA1Ii8+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiLz48L3N2Zz4=) */
+const globe2Icon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "M21.54 15H17a2 2 0 0 0-2 2v4.54M7 3.34V5a3 3 0 0 0 3 3v0a2 2 0 0 1 2 2v0c0 1.1.9 2 2 2v0a2 2 0 0 0 2-2v0c0-1.1.9-2 2-2h3.17M11 21.95V18a2 2 0 0 0-2-2v0a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"
+  }), /*#__PURE__*/jsx("circle", {
+    cx: 12,
+    cy: 12,
+    r: 10
+  })]
+});
+
+export { globe2Icon };

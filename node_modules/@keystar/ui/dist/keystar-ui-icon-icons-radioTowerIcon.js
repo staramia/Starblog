@@ -1,0 +1,16 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![radioTowerIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNNC45IDE2LjFDMSAxMi4yIDEgNS44IDQuOSAxLjlNNy44IDQuN2E2LjE0IDYuMTQgMCAwIDAtLjggNy41Ii8+PGNpcmNsZSBjeD0iMTIiIGN5PSI5IiByPSIyIi8+PHBhdGggZD0iTTE2LjIgNC44YzIgMiAyLjI2IDUuMTEuOCA3LjQ3TTE5LjEgMS45YTkuOTYgOS45NiAwIDAgMSAwIDE0LjFNOS41IDE4aDVNOCAyMmw0LTExIDQgMTEiLz48L3N2Zz4=) */
+const radioTowerIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "M4.9 16.1C1 12.2 1 5.8 4.9 1.9M7.8 4.7a6.14 6.14 0 0 0-.8 7.5"
+  }), /*#__PURE__*/jsx("circle", {
+    cx: 12,
+    cy: 9,
+    r: 2
+  }), /*#__PURE__*/jsx("path", {
+    d: "M16.2 4.8c2 2 2.26 5.11.8 7.47M19.1 1.9a9.96 9.96 0 0 1 0 14.1M9.5 18h5M8 22l4-11 4 11"
+  })]
+});
+
+export { radioTowerIcon };

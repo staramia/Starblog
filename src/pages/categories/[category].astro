@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublishedPosts, groupByCategory } from '../../lib/posts';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  const grouped = groupByCategory(posts);
+  return Object.entries(grouped).map(([category, entries]) => ({
+    params: { category },
+    props: { category, entries },
+  }));
+}
+
+const { category, entries } = Astro.props;
+---
+
+<BaseLayout title={`${category} | 分类`} description={`分类 ${category} 下的文章列表`}>
+  <section class="article">
+    <h1>分类：{category}</h1>
+    <ul>
+      {entries.map((post: any) => (
+        <li>
+          <a href={`/posts/${post.slug}`}>{post.data.title}</a>
+          <span class="post-meta"> - {post.data.publishedAt?.toLocaleDateString('zh-CN')}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>

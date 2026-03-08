@@ -1,0 +1,12 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![heaterIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNMTEgOGMyLTMtMi0zIDAtNk0xNS41IDhjMi0zLTItMyAwLTZNNiAxMGguMDFNNiAxNGguMDFNMTAgMTZ2LTRNMTQgMTZ2LTRNMTggMTZ2LTQiLz48cGF0aCBkPSJNMjAgNmEyIDIgMCAwIDEgMiAydjEwYTIgMiAwIDAgMS0yIDJINGEyIDIgMCAwIDEtMi0yVjhhMiAyIDAgMCAxIDItMmgzTTUgMjB2Mk0xOSAyMHYyIi8+PC9zdmc+) */
+const heaterIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "M11 8c2-3-2-3 0-6M15.5 8c2-3-2-3 0-6M6 10h.01M6 14h.01M10 16v-4M14 16v-4M18 16v-4"
+  }), /*#__PURE__*/jsx("path", {
+    d: "M20 6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3M5 20v2M19 20v2"
+  })]
+});
+
+export { heaterIcon };

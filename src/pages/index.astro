@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPublishedPosts } from '../lib/posts';
+
+const posts = await getPublishedPosts();
+---
+
+<BaseLayout title="Starblog | 首页" description="一个支持可视化编辑与自动部署的 Astro 个人博客。">
+  <section class="hero">
+    <h1>写作像 Word 一样顺滑，发布像 Git 一样可靠</h1>
+    <p>
+      基于 Astro + Keystatic + Cloudflare Pages，提供极速加载、SEO 友好、全免费托管的个人博客体验。
+    </p>
+  </section>
+
+  <section>
+    <div class="post-grid">
+      {posts.map((post) => (
+        <article class="post-card">
+          <h2><a href={`/posts/${post.slug}`}>{post.data.title}</a></h2>
+          <p class="post-meta">
+            {post.data.publishedAt?.toLocaleDateString('zh-CN')} · {post.data.category}
+          </p>
+          {post.data.excerpt && <p>{post.data.excerpt}</p>}
+          <div class="chips">
+            {post.data.tags.map((tag) => (
+              <a class="chip" href={`/tags/${encodeURIComponent(tag)}`}>#{tag}</a>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

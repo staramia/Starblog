@@ -1,0 +1,8 @@
+import { jsx } from 'react/jsx-runtime';
+
+/** ![skipBackIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNMTkgMjAgOSAxMmwxMC04ek01IDE5VjUiLz48L3N2Zz4=) */
+const skipBackIcon = /*#__PURE__*/jsx("path", {
+  d: "M19 20 9 12l10-8zM5 19V5"
+});
+
+export { skipBackIcon };

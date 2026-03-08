@@ -1,0 +1,9 @@
+import { RefObject, ReactElement } from 'react';
+import { ListBoxLayout } from "./ListBoxLayout.js";
+import { ListBoxBaseProps } from "./types.js";
+/** @private */
+export declare function useListBoxLayout<T>(): ListBoxLayout<T>;
+declare const _ListBoxBase: <T>(props: ListBoxBaseProps<T> & {
+    ref?: RefObject<HTMLDivElement | null>;
+}) => ReactElement;
+export { _ListBoxBase as ListBoxBase };

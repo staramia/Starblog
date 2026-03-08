@@ -1,0 +1,14 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![squirrelIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNMTUuMjM2IDIyYTMgMyAwIDAgMC0yLjItNSIvPjxwYXRoIGQ9Ik0xNiAyMGEzIDMgMCAwIDEgMy0zaDFhMiAyIDAgMCAwIDItMnYtMmE0IDQgMCAwIDAtNC00VjRNMTggMTNoLjAxIi8+PHBhdGggZD0iTTE4IDZhNCA0IDAgMCAwLTQgNCA3IDcgMCAwIDAtNyA3YzAtNSA0LTUgNC0xMC41YTQuNSA0LjUgMCAxIDAtOSAwIDIuNSAyLjUgMCAwIDAgNSAwQzcgMTAgMyAxMSAzIDE3YzAgMi44IDIuMiA1IDUgNWgxMCIvPjwvc3ZnPg==) */
+const squirrelIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "M15.236 22a3 3 0 0 0-2.2-5"
+  }), /*#__PURE__*/jsx("path", {
+    d: "M16 20a3 3 0 0 1 3-3h1a2 2 0 0 0 2-2v-2a4 4 0 0 0-4-4V4M18 13h.01"
+  }), /*#__PURE__*/jsx("path", {
+    d: "M18 6a4 4 0 0 0-4 4 7 7 0 0 0-7 7c0-5 4-5 4-10.5a4.5 4.5 0 1 0-9 0 2.5 2.5 0 0 0 5 0C7 10 3 11 3 17c0 2.8 2.2 5 5 5h10"
+  })]
+});
+
+export { squirrelIcon };

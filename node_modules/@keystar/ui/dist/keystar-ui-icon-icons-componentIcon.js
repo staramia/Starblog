@@ -1,0 +1,8 @@
+import { jsx } from 'react/jsx-runtime';
+
+/** ![componentIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNNS41IDguNSA5IDEybC0zLjUgMy41TDIgMTJ6TTEyIDJsMy41IDMuNUwxMiA5IDguNSA1LjV6TTE4LjUgOC41IDIyIDEybC0zLjUgMy41TDE1IDEyek0xMiAxNWwzLjUgMy41TDEyIDIybC0zLjUtMy41eiIvPjwvc3ZnPg==) */
+const componentIcon = /*#__PURE__*/jsx("path", {
+  d: "M5.5 8.5 9 12l-3.5 3.5L2 12zM12 2l3.5 3.5L12 9 8.5 5.5zM18.5 8.5 22 12l-3.5 3.5L15 12zM12 15l3.5 3.5L12 22l-3.5-3.5z"
+});
+
+export { componentIcon };

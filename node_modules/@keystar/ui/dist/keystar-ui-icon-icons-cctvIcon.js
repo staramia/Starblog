@@ -1,0 +1,12 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![cctvIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNNyA5aC4wMU0xNi43NSAxMkgyMmwtMy41IDctMy4wOS00LjMyIi8+PHBhdGggZD0ibTE4IDkuNS00IDgtMTAuMzktNS4yYTIuOTIgMi45MiAwIDAgMS0xLjMtMy45MUwzLjY5IDUuNmEyLjkyIDIuOTIgMCAwIDEgMy45Mi0xLjNaTTIgMTloMy43NmEyIDIgMCAwIDAgMS44LTEuMUw5IDE1TTIgMjF2LTQiLz48L3N2Zz4=) */
+const cctvIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "M7 9h.01M16.75 12H22l-3.5 7-3.09-4.32"
+  }), /*#__PURE__*/jsx("path", {
+    d: "m18 9.5-4 8-10.39-5.2a2.92 2.92 0 0 1-1.3-3.91L3.69 5.6a2.92 2.92 0 0 1 3.92-1.3ZM2 19h3.76a2 2 0 0 0 1.8-1.1L9 15M2 21v-4"
+  })]
+});
+
+export { cctvIcon };

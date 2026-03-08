@@ -1,0 +1,8 @@
+import { jsx } from 'react/jsx-runtime';
+
+/** ![arrowDownLeftIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNMTcgNyA3IDE3TTE3IDE3SDdWNyIvPjwvc3ZnPg==) */
+const arrowDownLeftIcon = /*#__PURE__*/jsx("path", {
+  d: "M17 7 7 17M17 17H7V7"
+});
+
+export { arrowDownLeftIcon };

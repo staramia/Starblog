@@ -1,0 +1,12 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![refreshCwOffIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJtMjEgOC0yLjI2LTIuMjZBOS43NSA5Ljc1IDAgMCAwIDEyIDNjLTEgMC0xLjk3LjE2LTIuODcuNDdNOCAxNkgzdjVNMyAxMmMwLTIuNDkgMS00Ljc0IDIuNjQtNi4zNiIvPjxwYXRoIGQ9Im0zIDE2IDIuMjYgMi4yNkE5Ljc1IDkuNzUgMCAwIDAgMTIgMjFjMi40OSAwIDQuNzQtMSA2LjM2LTIuNjRNMjEgMTJjMCAxLS4xNiAxLjk3LS40NyAyLjg3TTIxIDN2NWgtNU0yMiAyMiAyIDIiLz48L3N2Zz4=) */
+const refreshCwOffIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "m21 8-2.26-2.26A9.75 9.75 0 0 0 12 3c-1 0-1.97.16-2.87.47M8 16H3v5M3 12c0-2.49 1-4.74 2.64-6.36"
+  }), /*#__PURE__*/jsx("path", {
+    d: "m3 16 2.26 2.26A9.75 9.75 0 0 0 12 21c2.49 0 4.74-1 6.36-2.64M21 12c0 1-.16 1.97-.47 2.87M21 3v5h-5M22 22 2 2"
+  })]
+});
+
+export { refreshCwOffIcon };

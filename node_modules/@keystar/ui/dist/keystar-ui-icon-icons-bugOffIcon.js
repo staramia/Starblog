@@ -1,0 +1,16 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![bugOffIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNMTUgNy4xM1Y2YTMgMyAwIDAgMC01LjE0LTIuMUw4IDJNMTQuMTIgMy44OCAxNiAyIi8+PHBhdGggZD0iTTIyIDEzaC00di0yYTQgNCAwIDAgMC00LTRoLTEuMyIvPjxwYXRoIGQ9Ik0yMC45NyA1YzAgMi4xLTEuNiAzLjgtMy41IDRNMiAybDIwIDIwTTcuNyA3LjdBNCA0IDAgMCAwIDYgMTF2M2E2IDYgMCAwIDAgMTEuMTMgMy4xM00xMiAyMHYtOE02IDEzSDIiLz48cGF0aCBkPSJNMyAyMWMwLTIuMSAxLjctMy45IDMuOC00Ii8+PC9zdmc+) */
+const bugOffIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "M15 7.13V6a3 3 0 0 0-5.14-2.1L8 2M14.12 3.88 16 2"
+  }), /*#__PURE__*/jsx("path", {
+    d: "M22 13h-4v-2a4 4 0 0 0-4-4h-1.3"
+  }), /*#__PURE__*/jsx("path", {
+    d: "M20.97 5c0 2.1-1.6 3.8-3.5 4M2 2l20 20M7.7 7.7A4 4 0 0 0 6 11v3a6 6 0 0 0 11.13 3.13M12 20v-8M6 13H2"
+  }), /*#__PURE__*/jsx("path", {
+    d: "M3 21c0-2.1 1.7-3.9 3.8-4"
+  })]
+});
+
+export { bugOffIcon };

@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublishedPosts, groupByTag } from '../../lib/posts';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  const grouped = groupByTag(posts);
+  return Object.entries(grouped).map(([tag, entries]) => ({
+    params: { tag },
+    props: { tag, entries },
+  }));
+}
+
+const { tag, entries } = Astro.props;
+---
+
+<BaseLayout title={`#${tag} | 标签`} description={`标签 ${tag} 下的文章列表`}>
+  <section class="article">
+    <h1>标签：#{tag}</h1>
+    <ul>
+      {entries.map((post: any) => (
+        <li>
+          <a href={`/posts/${post.slug}`}>{post.data.title}</a>
+          <span class="post-meta"> - {post.data.publishedAt?.toLocaleDateString('zh-CN')}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>

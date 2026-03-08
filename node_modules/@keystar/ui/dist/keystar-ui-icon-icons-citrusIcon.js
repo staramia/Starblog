@@ -1,0 +1,14 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![citrusIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNMjEuNjYgMTcuNjdhMS4wOCAxLjA4IDAgMCAxLS4wNCAxLjZBMTIgMTIgMCAwIDEgNC43MyAyLjM4YTEuMSAxLjEgMCAwIDEgMS42MS0uMDR6Ii8+PHBhdGggZD0iTTE5LjY1IDE1LjY2QTggOCAwIDAgMSA4LjM1IDQuMzRNMTQgMTBsLTUuNSA1LjUiLz48cGF0aCBkPSJNMTQgMTcuODVWMTBINi4xNSIvPjwvc3ZnPg==) */
+const citrusIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "M21.66 17.67a1.08 1.08 0 0 1-.04 1.6A12 12 0 0 1 4.73 2.38a1.1 1.1 0 0 1 1.61-.04z"
+  }), /*#__PURE__*/jsx("path", {
+    d: "M19.65 15.66A8 8 0 0 1 8.35 4.34M14 10l-5.5 5.5"
+  }), /*#__PURE__*/jsx("path", {
+    d: "M14 17.85V10H6.15"
+  })]
+});
+
+export { citrusIcon };

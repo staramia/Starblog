@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "include": [
+    "/_server-islands/*",
+    "/_image",
+    "/api/*",
+    "/keystatic/*"
+  ],
+  "exclude": [
+    "/",
+    "/_astro/*",
+    "/robots.txt",
+    "/uploads/demo-cover.svg",
+    "/404",
+    "/about",
+    "/archives",
+    "/categories/*",
+    "/posts/*",
+    "/tags/*"
+  ]
+}

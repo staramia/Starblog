@@ -1,0 +1,12 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![castleIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNMjIgMjB2LTlIMnY5YTIgMiAwIDAgMCAyIDJoMTZhMiAyIDAgMCAwIDItMk0xOCAxMVY0SDZ2NyIvPjxwYXRoIGQ9Ik0xNSAyMnYtNGEzIDMgMCAwIDAtMy0zdjBhMyAzIDAgMCAwLTMgM3Y0TTIyIDExVjlNMiAxMVY5TTYgNFYyTTE4IDRWMk0xMCA0VjJNMTQgNFYyIi8+PC9zdmc+) */
+const castleIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "M22 20v-9H2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2M18 11V4H6v7"
+  }), /*#__PURE__*/jsx("path", {
+    d: "M15 22v-4a3 3 0 0 0-3-3v0a3 3 0 0 0-3 3v4M22 11V9M2 11V9M6 4V2M18 4V2M10 4V2M14 4V2"
+  })]
+});
+
+export { castleIcon };

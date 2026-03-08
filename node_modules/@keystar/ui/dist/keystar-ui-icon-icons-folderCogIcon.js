@@ -1,0 +1,14 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![folderCogIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48Y2lyY2xlIGN4PSIxOCIgY3k9IjE4IiByPSIzIi8+PHBhdGggZD0iTTEwLjMgMjBINGEyIDIgMCAwIDEtMi0yVjVhMiAyIDAgMCAxIDItMmgzLjlhMiAyIDAgMCAxIDEuNjkuOWwuODEgMS4yYTIgMiAwIDAgMCAxLjY3LjlIMjBhMiAyIDAgMCAxIDIgMnYzLjNNMjEuNyAxOS40bC0uOS0uM00xNS4yIDE2LjlsLS45LS4zTTE2LjYgMjEuN2wuMy0uOU0xOS4xIDE1LjJsLjMtLjlNMTkuNiAyMS43bC0uNC0xTTE2LjggMTUuM2wtLjQtMU0xNC4zIDE5LjZsMS0uNE0yMC43IDE2LjhsMS0uNCIvPjwvc3ZnPg==) */
+const folderCogIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("circle", {
+    cx: 18,
+    cy: 18,
+    r: 3
+  }), /*#__PURE__*/jsx("path", {
+    d: "M10.3 20H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H20a2 2 0 0 1 2 2v3.3M21.7 19.4l-.9-.3M15.2 16.9l-.9-.3M16.6 21.7l.3-.9M19.1 15.2l.3-.9M19.6 21.7l-.4-1M16.8 15.3l-.4-1M14.3 19.6l1-.4M20.7 16.8l1-.4"
+  })]
+});
+
+export { folderCogIcon };

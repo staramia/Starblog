@@ -1,0 +1,12 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![landPlotIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJtMTIgOCA2LTMtNi0zdjEwIi8+PHBhdGggZD0ibTggMTEuOTktNS41IDMuMTRhMSAxIDAgMCAwIDAgMS43NGw4LjUgNC44NmEyIDIgMCAwIDAgMiAwbDguNS00Ljg2YTEgMSAwIDAgMCAwLTEuNzRMMTYgMTJNNi40OSAxMi44NWwxMS4wMiA2LjNNMTcuNTEgMTIuODUgNi41IDE5LjE1Ii8+PC9zdmc+) */
+const landPlotIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "m12 8 6-3-6-3v10"
+  }), /*#__PURE__*/jsx("path", {
+    d: "m8 11.99-5.5 3.14a1 1 0 0 0 0 1.74l8.5 4.86a2 2 0 0 0 2 0l8.5-4.86a1 1 0 0 0 0-1.74L16 12M6.49 12.85l11.02 6.3M17.51 12.85 6.5 19.15"
+  })]
+});
+
+export { landPlotIcon };

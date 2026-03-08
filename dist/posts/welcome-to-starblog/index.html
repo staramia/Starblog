@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>欢迎来到 Starblog：零成本可视化博客</title><meta name="description" content="使用 Astro + Keystatic + Cloudflare Pages 实现类 Word 编辑与自动化发布。"><link rel="canonical" href="https://example.com/posts/welcome-to-starblog"><meta property="og:type" content="website"><meta property="og:title" content="欢迎来到 Starblog：零成本可视化博客"><meta property="og:description" content="使用 Astro + Keystatic + Cloudflare Pages 实现类 Word 编辑与自动化发布。"><meta property="og:url" content="https://example.com/posts/welcome-to-starblog"><meta name="twitter:card" content="summary_large_image"><script>
+      const persisted = localStorage.getItem('theme');
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = persisted || (systemDark ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme;
+    </script><link rel="stylesheet" href="/_astro/about.CB6SJhtO.css"></head> <body> <header class="site-header"> <div class="container header-inner"> <div class="brand-wrap"> <a href="/" class="brand">Starblog</a> <span class="brand-subtitle">个人知识博客</span> </div> <nav class="nav" aria-label="主导航"> <a href="/archives">归档</a> <a href="/about">关于</a> </nav> <div class="header-actions"> <a href="/keystatic" class="admin-link">内容后台</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换主题" aria-pressed="false"> <span id="theme-icon" aria-hidden="true">◐</span> </button> </div> </div> </header> <main class="container main-content">  <article class="article"> <h1>欢迎来到 Starblog</h1> <p class="post-meta"> 2026/3/8 · 公告 </p> <div class="chips"> <a class="chip" href="/tags/Astro">#Astro</a><a class="chip" href="/tags/Keystatic">#Keystatic</a><a class="chip" href="/tags/Cloudflare">#Cloudflare</a> </div> <hr> <p>欢迎使用 Starblog。</p>
+<p>这个项目用于验证以下能力：</p>
+<ul>
+<li>可视化后台编辑（<code>/keystatic</code>）</li>
+<li>GitHub 模式发布提交</li>
+<li>Cloudflare Pages 自动构建部署</li>
+</ul>
+<h2 id="代码高亮示例">代码高亮示例</h2>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">export</span><span style="color:#D73A49;--shiki-dark:#F97583"> function</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> hello</span><span style="color:#24292E;--shiki-dark:#E1E4E8">(</span><span style="color:#E36209;--shiki-dark:#FFAB70">name</span><span style="color:#D73A49;--shiki-dark:#F97583">:</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> string</span><span style="color:#24292E;--shiki-dark:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">  return</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> `Hello, ${</span><span style="color:#24292E;--shiki-dark:#E1E4E8">name</span><span style="color:#032F62;--shiki-dark:#9ECBFF">}`</span><span style="color:#24292E;--shiki-dark:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#24292E;--shiki-dark:#E1E4E8">}</span></span></code></pre>
+<blockquote>
+<p>如果你正在阅读这篇文章，说明前台路由与 Markdown 渲染已经生效。</p>
+</blockquote> </article>  </main> <footer class="site-footer"> <div class="container"> <p>© 2026 Starblog. Built with Astro + Keystatic + Cloudflare.</p> </div> </footer> <script>
+      const button = document.getElementById('theme-toggle');
+      const icon = document.getElementById('theme-icon');
+
+      function syncThemeControl(theme) {
+        const isDark = theme === 'dark';
+        if (icon) icon.textContent = isDark ? '☀' : '☾';
+        if (button) {
+          button.setAttribute('aria-pressed', String(isDark));
+          button.setAttribute('aria-label', isDark ? '切换到浅色模式' : '切换到深色模式');
+        }
+      }
+
+      syncThemeControl(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+
+      button?.addEventListener('click', () => {
+        const current = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem('theme', next);
+        syncThemeControl(next);
+      });
+    </script> </body> </html>

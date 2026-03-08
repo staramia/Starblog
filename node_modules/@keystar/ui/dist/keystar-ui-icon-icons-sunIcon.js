@@ -1,0 +1,14 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![sunIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSI0Ii8+PHBhdGggZD0iTTEyIDJ2Mk0xMiAyMHYyTTQuOTMgNC45M2wxLjQxIDEuNDFNMTcuNjYgMTcuNjZsMS40MSAxLjQxTTIgMTJoMk0yMCAxMmgyTTYuMzQgMTcuNjZsLTEuNDEgMS40MU0xOS4wNyA0LjkzbC0xLjQxIDEuNDEiLz48L3N2Zz4=) */
+const sunIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("circle", {
+    cx: 12,
+    cy: 12,
+    r: 4
+  }), /*#__PURE__*/jsx("path", {
+    d: "M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"
+  })]
+});
+
+export { sunIcon };

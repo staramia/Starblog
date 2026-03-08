@@ -1,0 +1,16 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![guitarIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJtMjAgNyAxLjctMS43YTEgMSAwIDAgMCAwLTEuNGwtMS42LTEuNmExIDEgMCAwIDAtMS40IDBMMTcgNHYzWk0xNyA3bC01LjEgNS4xIi8+PGNpcmNsZSBjeD0iMTEuNSIgY3k9IjEyLjUiIHI9Ii41Ii8+PHBhdGggZD0iTTYgMTJhMiAyIDAgMCAwIDEuOC0xLjJsLjQtLjlDOC43IDguOCA5LjggOCAxMSA4YzIuOCAwIDUgMi4yIDUgNSAwIDEuMi0uOCAyLjMtMS45IDIuOGwtLjkuNEEyIDIgMCAwIDAgMTIgMThhNCA0IDAgMCAxLTQgNGMtMy4zIDAtNi0yLjctNi02YTQgNCAwIDAgMSA0LTRNNiAxNmwyIDIiLz48L3N2Zz4=) */
+const guitarIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "m20 7 1.7-1.7a1 1 0 0 0 0-1.4l-1.6-1.6a1 1 0 0 0-1.4 0L17 4v3ZM17 7l-5.1 5.1"
+  }), /*#__PURE__*/jsx("circle", {
+    cx: 11.5,
+    cy: 12.5,
+    r: 0.5
+  }), /*#__PURE__*/jsx("path", {
+    d: "M6 12a2 2 0 0 0 1.8-1.2l.4-.9C8.7 8.8 9.8 8 11 8c2.8 0 5 2.2 5 5 0 1.2-.8 2.3-1.9 2.8l-.9.4A2 2 0 0 0 12 18a4 4 0 0 1-4 4c-3.3 0-6-2.7-6-6a4 4 0 0 1 4-4M6 16l2 2"
+  })]
+});
+
+export { guitarIcon };

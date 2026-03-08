@@ -1,0 +1,14 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![serverCogIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIzIi8+PHBhdGggZD0iTTQuNSAxMEg0YTIgMiAwIDAgMS0yLTJWNGEyIDIgMCAwIDEgMi0yaDE2YTIgMiAwIDAgMSAyIDJ2NGEyIDIgMCAwIDEtMiAyaC0uNU00LjUgMTRINGEyIDIgMCAwIDAtMiAydjRhMiAyIDAgMCAwIDIgMmgxNmEyIDIgMCAwIDAgMi0ydi00YTIgMiAwIDAgMC0yLTJoLS41TTYgNmguMDFNNiAxOGguMDFNMTUuNyAxMy40bC0uOS0uM005LjIgMTAuOWwtLjktLjNNMTAuNiAxNS43bC4zLS45TTEzLjYgMTUuN2wtLjQtMU0xMC44IDkuM2wtLjQtMU04LjMgMTMuNmwxLS40TTE0LjcgMTAuOGwxLS40TTEzLjQgOC4zbC0uMy45Ii8+PC9zdmc+) */
+const serverCogIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("circle", {
+    cx: 12,
+    cy: 12,
+    r: 3
+  }), /*#__PURE__*/jsx("path", {
+    d: "M4.5 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-.5M4.5 14H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-.5M6 6h.01M6 18h.01M15.7 13.4l-.9-.3M9.2 10.9l-.9-.3M10.6 15.7l.3-.9M13.6 15.7l-.4-1M10.8 9.3l-.4-1M8.3 13.6l1-.4M14.7 10.8l1-.4M13.4 8.3l-.3.9"
+  })]
+});
+
+export { serverCogIcon };

@@ -1,0 +1,12 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![babyIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNOSAxMmguMDFNMTUgMTJoLjAxTTEwIDE2Yy41LjMgMS4yLjUgMiAuNXMxLjUtLjIgMi0uNSIvPjxwYXRoIGQ9Ik0xOSA2LjNhOSA5IDAgMCAxIDEuOCAzLjkgMiAyIDAgMCAxIDAgMy42IDkgOSAwIDAgMS0xNy42IDAgMiAyIDAgMCAxIDAtMy42QTkgOSAwIDAgMSAxMiAzYzIgMCAzLjUgMS4xIDMuNSAyLjVzLS45IDIuNS0yIDIuNWMtLjggMC0xLjUtLjQtMS41LTEiLz48L3N2Zz4=) */
+const babyIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "M9 12h.01M15 12h.01M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"
+  }), /*#__PURE__*/jsx("path", {
+    d: "M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"
+  })]
+});
+
+export { babyIcon };

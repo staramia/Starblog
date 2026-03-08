@@ -1,0 +1,16 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![folderSyncIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNOSAyMEg0YTIgMiAwIDAgMS0yLTJWNWEyIDIgMCAwIDEgMi0yaDMuOWEyIDIgMCAwIDEgMS42OS45bC44MSAxLjJhMiAyIDAgMCAwIDEuNjcuOUgyMGEyIDIgMCAwIDEgMiAydi41Ii8+PHBhdGggZD0iTTEyIDEwdjRoNCIvPjxwYXRoIGQ9Im0xMiAxNCAxLjUzNS0xLjYwNWE1IDUgMCAwIDEgOCAxLjVNMjIgMjJ2LTRoLTQiLz48cGF0aCBkPSJtMjIgMTgtMS41MzUgMS42MDVhNSA1IDAgMCAxLTgtMS41Ii8+PC9zdmc+) */
+const folderSyncIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "M9 20H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H20a2 2 0 0 1 2 2v.5"
+  }), /*#__PURE__*/jsx("path", {
+    d: "M12 10v4h4"
+  }), /*#__PURE__*/jsx("path", {
+    d: "m12 14 1.535-1.605a5 5 0 0 1 8 1.5M22 22v-4h-4"
+  }), /*#__PURE__*/jsx("path", {
+    d: "m22 18-1.535 1.605a5 5 0 0 1-8-1.5"
+  })]
+});
+
+export { folderSyncIcon };

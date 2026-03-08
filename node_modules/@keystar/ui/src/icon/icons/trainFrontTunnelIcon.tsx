@@ -1,0 +1,8 @@
+/** ![trainFrontTunnelIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNMiAyMlYxMmExMCAxMCAwIDEgMSAyMCAwdjEwIi8+PHBhdGggZD0iTTE1IDYuOHYxLjRhMyAyLjggMCAxIDEtNiAwVjYuOE0xMCAxNWguMDFNMTQgMTVoLjAxIi8+PHBhdGggZD0iTTEwIDE5YTQgNCAwIDAgMS00LTR2LTNhNiA2IDAgMSAxIDEyIDB2M2E0IDQgMCAwIDEtNCA0Wk05IDE5bC0yIDNNMTUgMTlsMiAzIi8+PC9zdmc+) */
+export const trainFrontTunnelIcon = (
+  <>
+    <path d="M2 22V12a10 10 0 1 1 20 0v10" />
+    <path d="M15 6.8v1.4a3 2.8 0 1 1-6 0V6.8M10 15h.01M14 15h.01" />
+    <path d="M10 19a4 4 0 0 1-4-4v-3a6 6 0 1 1 12 0v3a4 4 0 0 1-4 4ZM9 19l-2 3M15 19l2 3" />
+  </>
+);

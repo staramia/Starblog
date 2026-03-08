@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>#Cloudflare | 标签</title><meta name="description" content="标签 Cloudflare 下的文章列表"><link rel="canonical" href="https://example.com/tags/Cloudflare/"><meta property="og:type" content="website"><meta property="og:title" content="#Cloudflare | 标签"><meta property="og:description" content="标签 Cloudflare 下的文章列表"><meta property="og:url" content="https://example.com/tags/Cloudflare/"><meta name="twitter:card" content="summary_large_image"><script>
+      const persisted = localStorage.getItem('theme');
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = persisted || (systemDark ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme;
+    </script><link rel="stylesheet" href="/_astro/about.CB6SJhtO.css"></head> <body> <header class="site-header"> <div class="container header-inner"> <div class="brand-wrap"> <a href="/" class="brand">Starblog</a> <span class="brand-subtitle">个人知识博客</span> </div> <nav class="nav" aria-label="主导航"> <a href="/archives">归档</a> <a href="/about">关于</a> </nav> <div class="header-actions"> <a href="/keystatic" class="admin-link">内容后台</a> <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换主题" aria-pressed="false"> <span id="theme-icon" aria-hidden="true">◐</span> </button> </div> </div> </header> <main class="container main-content">  <section class="article"> <h1>标签：#Cloudflare</h1> <ul> <li> <a href="/posts/welcome-to-starblog">欢迎来到 Starblog</a> <span class="post-meta"> - 2026/3/8</span> </li> </ul> </section>  </main> <footer class="site-footer"> <div class="container"> <p>© 2026 Starblog. Built with Astro + Keystatic + Cloudflare.</p> </div> </footer> <script>
+      const button = document.getElementById('theme-toggle');
+      const icon = document.getElementById('theme-icon');
+
+      function syncThemeControl(theme) {
+        const isDark = theme === 'dark';
+        if (icon) icon.textContent = isDark ? '☀' : '☾';
+        if (button) {
+          button.setAttribute('aria-pressed', String(isDark));
+          button.setAttribute('aria-label', isDark ? '切换到浅色模式' : '切换到深色模式');
+        }
+      }
+
+      syncThemeControl(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+
+      button?.addEventListener('click', () => {
+        const current = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem('theme', next);
+        syncThemeControl(next);
+      });
+    </script> </body> </html>

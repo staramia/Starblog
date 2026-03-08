@@ -1,0 +1,12 @@
+import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+
+/** ![sandwichIcon](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiI+PHJlY3QgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz48cGF0aCBkPSJNMyAxMXYzYTEgMSAwIDAgMCAxIDFoMTZhMSAxIDAgMCAwIDEtMXYtM00xMiAxOUg0YTEgMSAwIDAgMS0xLTF2LTJhMSAxIDAgMCAxIDEtMWgxNmExIDEgMCAwIDEgMSAxdjJhMSAxIDAgMCAxLTEgMWgtMy44M00zIDExbDcuNzctNi4wNGEyIDIgMCAwIDEgMi40NiAwTDIxIDExeiIvPjxwYXRoIGQ9Ik0xMi45NyAxOS43NyA3IDE1aDEyLjVsLTMuNzUgNC41YTIgMiAwIDAgMS0yLjc4LjI3Ii8+PC9zdmc+) */
+const sandwichIcon = /*#__PURE__*/jsxs(Fragment, {
+  children: [/*#__PURE__*/jsx("path", {
+    d: "M3 11v3a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-3M12 19H4a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-3.83M3 11l7.77-6.04a2 2 0 0 1 2.46 0L21 11z"
+  }), /*#__PURE__*/jsx("path", {
+    d: "M12.97 19.77 7 15h12.5l-3.75 4.5a2 2 0 0 1-2.78.27"
+  })]
+});
+
+export { sandwichIcon };
