@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { navSections } from '../../lib/nav-sections';
+import { getPostAuthorName, getPostDates, getPostSlug, getPublishedPostsByCategory } from '../../lib/posts';
+
+const section = navSections.find((item) => item.key === 'reports')!;
+const posts = await getPublishedPostsByCategory('report');
+
+const metaMap = new Map<string, { author: string; published: string }>();
+for (const post of posts) {
+  const slug = getPostSlug(post);
+  const { publishedAt } = await getPostDates(post);
+  const author = await getPostAuthorName(post);
+  metaMap.set(slug, {
+    author,
+    published: publishedAt.toLocaleString('zh-CN', { hour12: false }),
+  });
+}
+
+function titleOf(post: { data: { title: string | { name: string } } }) {
+  return typeof post.data.title === 'string' ? post.data.title : post.data.title.name;
+}
+---
+
+<BaseLayout title="工作汇报 | 导航" description={section.summary}>
+  <div class="nav-shell">
+    <aside class="nav-sidebar">
+      <h2><a href="/nav" class="nav-home-link">导航栏</a></h2>
+      <ul>
+        {navSections.map((item) => (
+          <li>
+            <a href={item.key === 'notes' ? '/nav/notes' : `/nav/${item.key}`} class={item.key === 'reports' ? 'is-active' : ''}>
+              {item.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </aside>
+    <section class="article nav-content">
+      <div class="nav-hero">
+        <p class="nav-hero-eyebrow">汇报中心</p>
+        <h1>工作汇报</h1>
+        <p class="post-meta">当前共收录 {posts.length} 篇汇报文章（bot 账号发布）。</p>
+      </div>
+      <ul class="list-board">
+        {posts.map((post) => {
+          const slug = getPostSlug(post);
+          const meta = metaMap.get(slug);
+          return (
+            <li class="list-item">
+              <a href={`/posts/${slug}`}>{titleOf(post)}</a>
+              <span class="post-meta">{meta?.author || '系统'} · {meta?.published || '未知时间'}</span>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  </div>
+</BaseLayout>

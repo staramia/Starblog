@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="新建文章 | 创作者后台" description="创建新的文章内容。">
+  <section class="article" id="post-page-root">
+    <div class="section-title">
+      <h1 id="page-title">新建文章</h1>
+    </div>
+    <p id="status" class="post-meta">填写内容后点击保存。</p>
+    <div id="editor" class="admin-editor">
+      <label>标题<input id="title" type="text" /></label>
+      <label>Slug<input id="slug" type="text" /></label>
+      <label>摘要<textarea id="excerpt" rows="3"></textarea></label>
+      <label>标签（逗号分隔）<input id="tags" type="text" placeholder="Astro,Cloudflare" /></label>
+      <label>状态
+        <select id="statusField">
+          <option value="published">发布</option>
+          <option value="draft">草稿</option>
+        </select>
+      </label>
+      <label>正文<textarea id="content" rows="12"></textarea></label>
+      <div class="hero-actions">
+        <button id="save-btn" class="btn btn-primary" type="button">保存文章</button>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    const statusEl = document.getElementById('status');
+    const saveBtn = document.getElementById('save-btn');
+    const pageTitle = document.getElementById('page-title');
+    const titleEl = document.getElementById('title');
+    const slugEl = document.getElementById('slug');
+    const excerptEl = document.getElementById('excerpt');
+    const tagsEl = document.getElementById('tags');
+    const statusField = document.getElementById('statusField');
+    const contentEl = document.getElementById('content');
+    const editSlug = new URLSearchParams(window.location.search).get('slug') || '';
+
+    const readForm = () => ({
+      title: titleEl.value,
+      slug: slugEl.value,
+      excerpt: excerptEl.value,
+      tags: tagsEl.value.split(',').map((x) => x.trim()).filter(Boolean),
+      status: statusField.value,
+      content: contentEl.value,
+    });
+
+    async function ensureLogin() {
+      const res = await fetch('/api/auth/me');
+      const data = await res.json();
+      if (!data.authenticated) {
+        location.href = '/admin/login';
+        return false;
+      }
+      return true;
+    }
+
+    async function loadPost() {
+      if (!editSlug) return;
+      if (statusEl) statusEl.textContent = '正在加载文章内容...';
+      const res = await fetch(`/api/admin/posts/${encodeURIComponent(editSlug)}`);
+      if (!res.ok) {
+        statusEl.textContent = '文章加载失败';
+        return;
+      }
+      const data = await res.json();
+      const post = data.post;
+      if (pageTitle) pageTitle.textContent = '编辑文章';
+      if (saveBtn) saveBtn.textContent = '更新文章';
+      titleEl.value = post.title || '';
+      slugEl.value = post.slug || '';
+      slugEl.setAttribute('disabled', 'disabled');
+      excerptEl.value = post.excerpt || '';
+      tagsEl.value = (post.tags || []).join(',');
+      statusField.value = post.status || 'draft';
+      contentEl.value = post.content || '';
+      statusEl.textContent = `正在编辑：${post.slug}`;
+    }
+
+    async function savePost() {
+      const payload = readForm();
+      const isEdit = Boolean(editSlug);
+      const endpoint = isEdit ? `/api/admin/posts/${encodeURIComponent(editSlug)}` : '/api/admin/posts';
+      const method = isEdit ? 'PUT' : 'POST';
+      const res = await fetch(endpoint, {
+        method,
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        statusEl.textContent = data.message || '保存失败';
+        return;
+      }
+      statusEl.textContent = isEdit ? '更新成功，正在返回文章管理...' : '保存成功，正在跳转到文章管理...';
+      setTimeout(() => {
+        location.href = '/admin/posts';
+      }, 700);
+    }
+
+    saveBtn?.addEventListener('click', savePost);
+
+    (async () => {
+      const ok = await ensureLogin();
+      if (!ok) return;
+      await loadPost();
+    })();
+  </script>
+</BaseLayout>

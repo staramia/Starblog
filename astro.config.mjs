@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
-import keystatic from '@keystatic/astro';
+import markdoc from '@astrojs/markdoc';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import remarkGfm from 'remark-gfm';
@@ -12,7 +12,7 @@ export default defineConfig({
     enabled: false,
   },
   adapter: cloudflare(),
-  integrations: [react(), sitemap(), keystatic()],
+  integrations: [react(), markdoc(), sitemap()],
   markdown: {
     remarkPlugins: [remarkGfm],
     syntaxHighlight: 'shiki',

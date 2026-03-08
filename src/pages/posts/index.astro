@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPostAuthorName, getPostDates, getPostSlug, getPublishedPostsByCategory } from '../../lib/posts';
+
+const posts = await getPublishedPostsByCategory('article');
+
+const metaMap = new Map<string, { author: string; published: string }>();
+for (const post of posts) {
+  const slug = getPostSlug(post);
+  const { publishedAt } = await getPostDates(post);
+  metaMap.set(slug, {
+    author: await getPostAuthorName(post),
+    published: publishedAt.toLocaleString('zh-CN', { hour12: false }),
+  });
+}
+
+function titleOf(post: { data: { title: string | { name: string } } }) {
+  return typeof post.data.title === 'string' ? post.data.title : post.data.title.name;
+}
+---
+
+<BaseLayout title="文库 | Starblog" description="查看所有已发布文章。">
+  <section class="article">
+    <div class="section-title">
+      <h1>文库</h1>
+      <a href="/nav">返回导航</a>
+    </div>
+    <p class="post-meta">共 {posts.length} 篇文章</p>
+    <ul class="list-board">
+      {posts.map((post) => {
+        const slug = getPostSlug(post);
+        const meta = metaMap.get(slug);
+        return (
+          <li class="list-item">
+            <a href={`/posts/${slug}`}>{titleOf(post)}</a>
+            <span class="post-meta">{meta?.author || '系统'} · {meta?.published || '未知时间'}</span>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+</BaseLayout>

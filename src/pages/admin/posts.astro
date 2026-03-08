@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="文章管理 | 创作者后台" description="查看并管理文章列表。">
+  <section class="article admin-list-page">
+    <div class="section-title">
+      <h1>文章管理</h1>
+    </div>
+    <p id="status" class="post-meta">加载中...</p>
+    <ul id="list" class="list-board"></ul>
+  </section>
+
+  <script is:inline>
+    const statusEl = document.getElementById('status');
+    const listEl = document.getElementById('list');
+
+    async function ensureLogin() {
+      const res = await fetch('/api/auth/me');
+      const data = await res.json();
+      if (!data.authenticated) {
+        location.href = '/admin/login';
+        return false;
+      }
+      return true;
+    }
+
+    async function loadList() {
+      const res = await fetch('/api/admin/posts');
+      if (!res.ok) {
+        statusEl.textContent = '加载文章失败，请先登录。';
+        return;
+      }
+
+      const data = await res.json();
+      const posts = data.posts || [];
+      statusEl.textContent = `共 ${posts.length} 篇文章`;
+
+      listEl.innerHTML = posts
+        .map(
+          (post) => `
+            <li class="list-item">
+              <div>
+                <a href="/posts/${post.slug}" target="_blank" rel="noreferrer">${post.title}</a>
+                <div class="post-meta">
+                  <span class="post-kind ${post.postCategory === 'report' ? 'is-report' : 'is-article'}">${post.postCategory === 'report' ? 'report' : 'article'}</span>
+                  · ${post.status} · ${new Date(post.updatedAt).toLocaleString('zh-CN', { hour12: false })}
+                </div>
+              </div>
+              <div class="hero-actions">
+                <button class="btn btn-secondary" data-edit="${post.slug}" type="button">编辑</button>
+                <button class="btn btn-secondary" data-delete="${post.slug}" type="button">删除</button>
+              </div>
+            </li>`
+        )
+        .join('');
+    }
+
+    async function removePost(slug) {
+      if (!confirm(`确认删除 ${slug} 吗？`)) return;
+      const res = await fetch(`/api/admin/posts/${slug}`, { method: 'DELETE' });
+      if (!res.ok) {
+        statusEl.textContent = '删除失败';
+        return;
+      }
+      await loadList();
+    }
+
+    listEl?.addEventListener('click', async (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      const editSlug = target.getAttribute('data-edit');
+      if (editSlug) {
+        location.href = `/admin/posts/new?slug=${encodeURIComponent(editSlug)}`;
+        return;
+      }
+      const deleteSlug = target.getAttribute('data-delete');
+      if (deleteSlug) {
+        await removePost(deleteSlug);
+      }
+    });
+
+    (async () => {
+      const ok = await ensureLogin();
+      if (!ok) return;
+      await loadList();
+    })();
+  </script>
+</BaseLayout>

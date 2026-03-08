@@ -11555,110 +11555,108 @@ var index = /*#__PURE__*/Object.freeze({
   markdoc: markdoc
 });
 
-const repo = process.env.KEYSTATIC_GITHUB_REPO || "owner/repo";
 const config = config$1({
   storage: {
-    kind: "github",
-    repo
+    kind: "local"
   },
   ui: {
     brand: {
-      name: "Starblog CMS"
+      name: "Starblog 内容管理"
     },
     navigation: {
-      Posts: ["posts"],
-      Settings: ["site"]
+      内容: ["posts"],
+      设置: ["site"]
     }
   },
   collections: {
     posts: collection({
-      label: "Posts",
-      path: "src/content/posts/*.md",
+      label: "文章",
+      slugField: "title",
+      path: "src/content/posts/*",
       format: {
-        contentField: "content"
+        contentField: "content",
+        data: "yaml"
       },
-      entryLayout: [
-        "title",
-        "status",
-        "slug",
-        "category",
-        "tags",
-        "publishedAt",
-        "updatedAt",
-        "excerpt",
-        "cover",
-        "seoTitle",
-        "seoDescription",
-        "canonical",
-        "content"
-      ],
+      entryLayout: ["title", "content", "advanced"],
       schema: {
-        title: index.text({
-          label: "Title",
-          description: "Article title shown in listings and pages.",
-          validation: { isRequired: true, length: { min: 1, max: 120 } }
+        title: index.slug({
+          name: {
+            label: "标题",
+            description: "用于列表与详情页展示，建议简洁明确。",
+            validation: { isRequired: true, length: { min: 1, max: 120 } }
+          },
+          slug: {
+            label: "Slug",
+            description: "用于文章 URL，例如：astro-keystatic-setup"
+          }
         }),
-        slug: index.text({
-          label: "Slug",
-          description: "Used in URL. Example: astro-keystatic-setup",
-          validation: { isRequired: true }
-        }),
-        excerpt: index.text({
-          label: "Excerpt",
-          multiline: true,
-          validation: { isRequired: false, length: { max: 200 } }
-        }),
-        cover: index.image({
-          label: "Cover",
-          directory: "public/uploads",
-          publicPath: "/uploads/"
-        }),
-        category: index.text({
-          label: "Category",
-          validation: { isRequired: true }
-        }),
-        tags: index.array(
-          index.text({
-            label: "Tag",
-            validation: { isRequired: true }
+        advanced: index.conditional(
+          index.checkbox({
+            label: "显示高级设置",
+            defaultValue: false
           }),
           {
-            label: "Tags",
-            itemLabel: (props) => props.value || "Tag",
-            validation: { length: { max: 8 } }
+            false: index.empty(),
+            true: index.object(
+              {
+                excerpt: index.text({
+                  label: "摘要",
+                  multiline: true,
+                  validation: { isRequired: false, length: { max: 200 } }
+                }),
+                cover: index.image({
+                  label: "封面图",
+                  directory: "public/uploads",
+                  publicPath: "/uploads/"
+                }),
+                category: index.text({
+                  label: "分类",
+                  defaultValue: "未分类",
+                  validation: { isRequired: false }
+                }),
+                tags: index.array(
+                  index.text({
+                    label: "标签",
+                    validation: { isRequired: true }
+                  }),
+                  {
+                    label: "标签列表",
+                    itemLabel: (props) => props.value || "新标签",
+                    validation: { length: { max: 8 } }
+                  }
+                ),
+                status: index.select({
+                  label: "状态",
+                  options: [
+                    { label: "草稿", value: "draft" },
+                    { label: "已发布", value: "published" }
+                  ],
+                  defaultValue: "published"
+                }),
+                seoTitle: index.text({
+                  label: "SEO 标题",
+                  validation: { isRequired: false }
+                }),
+                seoDescription: index.text({
+                  label: "SEO 描述",
+                  multiline: true,
+                  validation: { isRequired: false, length: { max: 160 } }
+                }),
+                canonical: index.url({
+                  label: "规范链接 Canonical URL",
+                  validation: { isRequired: false }
+                })
+              },
+              {
+                label: "高级设置"
+              }
+            )
           }
         ),
-        status: index.select({
-          label: "Status",
-          options: [
-            { label: "Draft", value: "draft" },
-            { label: "Published", value: "published" }
-          ],
-          defaultValue: "draft"
-        }),
-        publishedAt: index.datetime({
-          label: "Published At",
-          validation: { isRequired: false }
-        }),
-        updatedAt: index.datetime({
-          label: "Updated At",
-          validation: { isRequired: false }
-        }),
-        seoTitle: index.text({
-          label: "SEO Title",
-          validation: { isRequired: false }
-        }),
-        seoDescription: index.text({
-          label: "SEO Description",
-          multiline: true,
-          validation: { isRequired: false, length: { max: 160 } }
-        }),
-        canonical: index.url({
-          label: "Canonical URL",
-          validation: { isRequired: false }
-        }),
+        publishedAt: index.ignored(),
+        updatedAt: index.ignored(),
         content: index.document({
-          label: "Content",
+          label: "正文内容",
           formatting: true,
           links: true,
           dividers: true,
@@ -11672,15 +11670,15 @@ const config = config$1({
   },
   singletons: {
     site: singleton({
-      label: "Site Settings",
+      label: "站点设置",
       path: "src/content/site/settings",
       schema: {
         siteName: index.text({
-          label: "Site Name",
+          label: "站点名称",
           validation: { isRequired: true }
         }),
         siteDescription: index.text({
-          label: "Site Description",
+          label: "站点描述",
           multiline: true,
           validation: { isRequired: true }
         })

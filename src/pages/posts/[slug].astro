@@ -1,34 +1,46 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getPublishedPosts } from '../../lib/posts';
+import { getPostAuthorName, getPostDates, getPostSlug, getPublishedPosts } from '../../lib/posts';
+import { render } from 'astro:content';
 
 export const prerender = true;
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: getPostSlug(post) },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
-const { Content } = await post.render();
-const pageTitle = post.data.seoTitle || post.data.title;
-const pageDescription = post.data.seoDescription || post.data.excerpt || post.data.title;
+const { Content } = await render(post);
+const title = typeof post.data.title === 'string' ? post.data.title : post.data.title.name;
+const pageTitle =
+  (post.data.advanced?.discriminant ? post.data.advanced.value?.seoTitle : undefined) || title;
+const pageDescription =
+  (post.data.advanced?.discriminant ? post.data.advanced.value?.seoDescription : undefined) || title;
+const canonical = post.data.advanced?.discriminant ? post.data.advanced.value?.canonical : undefined;
+const { publishedAt, updatedAt } = await getPostDates(post);
+const publishedDate = publishedAt.toLocaleString('zh-CN', { hour12: false });
+const updatedDate = updatedAt.toLocaleString('zh-CN', { hour12: false });
+const authorName = await getPostAuthorName(post);
+const tags = post.data.advanced?.discriminant ? post.data.advanced.value?.tags || [] : [];
 ---
 
-<BaseLayout title={pageTitle} description={pageDescription} canonical={post.data.canonical}>
+<BaseLayout title={pageTitle} description={pageDescription} canonical={canonical}>
   <article class="article">
-    <h1>{post.data.title}</h1>
-    <p class="post-meta">
-      {post.data.publishedAt?.toLocaleDateString('zh-CN')} · {post.data.category}
-    </p>
-    <div class="chips">
-      {post.data.tags.map((tag: string) => (
-        <a class="chip" href={`/tags/${encodeURIComponent(tag)}`}>#{tag}</a>
-      ))}
-    </div>
+    <header class="article-header">
+      <h1>{title}</h1>
+      <p class="post-meta">
+        {authorName} · 发布于 {publishedDate} · 更新于 {updatedDate}
+      </p>
+      <div class="chips">
+        {tags.map((tag: string) => (
+          <a class="chip" href={`/tags/${encodeURIComponent(tag)}`}>#{tag}</a>
+        ))}
+      </div>
+    </header>
     <hr />
     <Content />
   </article>

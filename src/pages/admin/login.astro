@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="登录账号 | 创作者后台" description="登录创作者后台。">
+  <section class="article auth-card">
+    <h1>登录账号</h1>
+    <form id="login-form" class="auth-form">
+      <label>
+        账号
+        <input name="account" type="text" required placeholder="输入账号" />
+      </label>
+      <label>
+        密码
+        <input name="password" type="password" required minlength="8" placeholder="至少 8 位" />
+      </label>
+      <button class="btn btn-primary" type="submit">登录</button>
+      <p class="post-meta">还没有账号？<a href="/admin/register">立即注册</a></p>
+      <p id="message" class="post-meta"></p>
+    </form>
+  </section>
+
+  <script is:inline>
+    const form = document.getElementById('login-form');
+    const message = document.getElementById('message');
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const fd = new FormData(form);
+      const account = String(fd.get('account') || '');
+      const password = String(fd.get('password') || '');
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ account, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        message.textContent = data.message || '登录失败';
+        return;
+      }
+      location.href = '/admin';
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { navSections } from '../lib/nav-sections';
+---
+
+<BaseLayout title="导航 | Starblog" description="按主题快速进入笔记、AI 工作与协作板块。">
+  <div class="nav-shell">
+    <aside class="nav-sidebar">
+      <h2><a href="/nav" class="nav-home-link">导航栏</a></h2>
+      <ul>
+        {navSections.map((section) => (
+          <li><a href={section.key === 'notes' ? '/nav/notes' : section.key === 'reports' ? '/nav/reports' : `/nav/${section.key}`}>{section.title}</a></li>
+        ))}
+      </ul>
+    </aside>
+    <section class="article nav-content">
+      <div class="nav-hero">
+        <p class="nav-hero-eyebrow">内容中枢</p>
+        <h1>导航</h1>
+        <p class="post-meta">当前有 3 个核心板块，请从左侧纵向导航进入。</p>
+      </div>
+      <ul class="list-board">
+        {navSections.map((section) => (
+          <li class="list-item">
+            <strong>{section.title}</strong>
+            <span class="post-meta">{section.summary}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
